@@ -1,0 +1,39 @@
+---
+import { website } from "@/links";
+import "@styles/global.css";
+import { SEO } from "astro-seo";
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+const description = "// TODO: Add a description";
+---
+
+<!doctype html>
+<html lang="en">
+  <SEO
+    title={title}
+    description={description}
+    charset="UTF-8"
+    openGraph={{
+      basic: {
+        title: title,
+        type: "website",
+        image: `${website}/og-image.png`, // TODO: Add an og-image
+      },
+      optional: {
+        description: description,
+        siteName: "Adam Steciuk",
+      },
+    }}
+  />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="generator" content={Astro.generator} />
+  <meta name="author" content="Adam Steciuk" />
+  <body>
+    <slot />
+  </body>
+</html>
