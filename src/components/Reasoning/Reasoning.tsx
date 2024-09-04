@@ -1,5 +1,6 @@
 import ReasoningTest from "@components/Reasoning/ReasoningTest";
 import { Button } from "@components/ui/button";
+import { Progress } from "@components/ui/progress";
 import React from "react";
 
 const MAX_TIME = 5 * 60; // 5 minutes
@@ -48,7 +49,7 @@ const Reasoning = () => {
         <Button onClick={() => setTestState("in-progress")}>Start Test</Button>
       ) : testState === "in-progress" ? (
         <>
-          <p>Time: {time}</p>
+          <Progress value={(time / MAX_TIME) * 100} reverse />
           <p>Correct answers: {correctAnswers}</p>
           <p>Incorrect answers: {incorrectAnswers}</p>
           <Button onClick={resetTest}>Reset Test</Button>
