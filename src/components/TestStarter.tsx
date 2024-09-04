@@ -8,10 +8,10 @@ import React from "react";
 const TestStarter = () => {
   return (
     <>
-      <Test render={(props) => <Reasoning {...props} />} />
-      <Test render={(props) => <Perceptual {...props} />} />
-      <Test render={(props) => <Numbers {...props} />} />
-      <Test render={(props) => <Words {...props} />} />
+      <Test>{(props) => <Reasoning {...props} />}</Test>
+      <Test>{(props) => <Perceptual {...props} />}</Test>
+      <Test>{(props) => <Numbers {...props} />}</Test>
+      <Test>{(props) => <Words {...props} />}</Test>
     </>
   );
 };

@@ -6,7 +6,9 @@ import React from "react";
 
 const MAX_TIME = 8 * 60; // 5 minutes
 
-const Test = (props: { render: (props: TestProps) => React.ReactElement }) => {
+const Test = (props: {
+  children: (props: TestProps) => React.ReactElement;
+}) => {
   const [testState, setTestState] = React.useState<
     "not-started" | "in-progress" | "completed"
   >("not-started");
@@ -53,7 +55,7 @@ const Test = (props: { render: (props: TestProps) => React.ReactElement }) => {
           <p>Correct answers: {correctAnswers}</p>
           <p>Incorrect answers: {incorrectAnswers}</p>
           <Button onClick={resetTest}>Reset Test</Button>
-          {props.render({ onCorrectAnswer, onIncorrectAnswer })}
+          {props.children({ onCorrectAnswer, onIncorrectAnswer })}
         </>
       ) : (
         <div>Completed</div>

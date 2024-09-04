@@ -30,8 +30,8 @@ const Perceptual = (props: TestProps) => {
         <CardTitle>How many columns have the same letter?</CardTitle>
       </CardHeader>
       <CardContent className="flex gap-6 text-2xl">
-        {question.columns.map(([lowercase, uppercase]) => (
-          <div className="space-y-6">
+        {question.columns.map(([lowercase, uppercase], i) => (
+          <div className="space-y-6" key={i}>
             <div className="text-center">{lowercase}</div>
             <div className="text-center">{uppercase}</div>
           </div>
