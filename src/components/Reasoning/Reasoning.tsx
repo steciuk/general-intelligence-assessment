@@ -1,68 +1,76 @@
-import ReasoningTest from "@components/Reasoning/ReasoningTest";
+import { chooseRandom, pickRandom, randomBool } from "@/utils";
 import { Button } from "@components/ui/button";
-import { Progress } from "@components/ui/progress";
+import { Card, CardContent, CardHeader, CardTitle } from "@components/ui/card";
+import { comparisons, names } from "@components/Reasoning/data";
 import React from "react";
+import type { TestProps } from "@components/types";
 
-const MAX_TIME = 5 * 60; // 5 minutes
+const Reasoning = (props: TestProps) => {
+  const { onCorrectAnswer, onIncorrectAnswer } = props;
+  const [question, setQuestion] = React.useState(generateQuestion());
+  const [isStatementPhase, setIsStatementPhase] = React.useState(true);
 
-const Reasoning = () => {
-  const [testState, setTestState] = React.useState<
-    "not-started" | "in-progress" | "completed"
-  >("not-started");
-  const [time, setTime] = React.useState(0);
-  const [correctAnswers, setCorrectAnswers] = React.useState(0);
-  const [incorrectAnswers, setIncorrectAnswers] = React.useState(0);
-
-  const resetTest = () => {
-    setTime(0);
-    setCorrectAnswers(0);
-    setIncorrectAnswers(0);
-  };
-
-  const onCorrectAnswer = () => {
-    setCorrectAnswers((prev) => prev + 1);
-  };
-
-  const onIncorrectAnswer = () => {
-    setIncorrectAnswers((prev) => prev + 1);
-  };
-
-  React.useEffect(() => {
-    if (testState === "in-progress") {
-      const interval = setInterval(() => {
-        if (time >= MAX_TIME) {
-          clearInterval(interval);
-          setTestState("completed");
-          return;
-        }
-        setTime((prev) => prev + 1);
-      }, 1000);
-
-      return () => clearInterval(interval);
+  const onAnswer = (answer: string) => {
+    if (answer === question.answer) {
+      onCorrectAnswer();
+    } else {
+      onIncorrectAnswer();
     }
-  }, [testState, time]);
+
+    setIsStatementPhase(true);
+    setQuestion(generateQuestion());
+  };
 
   return (
-    <div>
-      <h1>Reasoning</h1>
-      {testState === "not-started" ? (
-        <Button onClick={() => setTestState("in-progress")}>Start Test</Button>
-      ) : testState === "in-progress" ? (
-        <>
-          <Progress value={(time / MAX_TIME) * 100} reverse />
-          <p>Correct answers: {correctAnswers}</p>
-          <p>Incorrect answers: {incorrectAnswers}</p>
-          <Button onClick={resetTest}>Reset Test</Button>
-          <ReasoningTest
-            onCorrectAnswer={onCorrectAnswer}
-            onIncorrectAnswer={onIncorrectAnswer}
-          />
-        </>
-      ) : (
-        <div>Completed</div>
-      )}
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          {isStatementPhase ? question.statement : question.question}
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        {isStatementPhase ? (
+          <Button onClick={() => setIsStatementPhase(false)}>
+            Show question
+          </Button>
+        ) : (
+          <div>
+            {question.namesToCompare.map((name) => (
+              <Button key={name} onClick={() => onAnswer(name)}>
+                {name}
+              </Button>
+            ))}
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 };
 
 export default Reasoning;
+
+function generateQuestion() {
+  const comparison = pickRandom(comparisons);
+  const [name1, name2] = chooseRandom(names, 2);
+  const isStatementPositive = randomBool();
+  const isQuestionPositive = randomBool();
+  const swapNames = randomBool();
+
+  const statement = `${name1} is ${
+    isStatementPositive
+      ? pickRandom(comparison.s[0])
+      : pickRandom(comparison.s[1])
+  } ${name2}.`;
+
+  const question = `Who is ${isQuestionPositive ? comparison.q[0] : comparison.q[1]}?`;
+
+  const answer = isStatementPositive === isQuestionPositive ? name1 : name2;
+  const namesToCompare = swapNames ? [name2, name1] : [name1, name2];
+
+  return {
+    statement,
+    question,
+    answer,
+    namesToCompare,
+  };
+}

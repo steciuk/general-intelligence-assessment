@@ -1,9 +1,4 @@
-import { chooseRandom, pickRandom, randomBool } from "@/utils";
-import { Button } from "@components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@components/ui/card";
-import React from "react";
-
-const names = [
+export const names = [
   "James",
   "Mary",
   "Michael",
@@ -106,7 +101,7 @@ const names = [
   "Helen",
 ];
 
-const comparisons = [
+export const comparisons = [
   {
     s: [
       ["stronger than", "not as weak as"],
@@ -591,76 +586,3 @@ const comparisons = [
     q: ["more enthusiastic", "more indifferent"],
   },
 ];
-
-function generateQuestion() {
-  const comparison = pickRandom(comparisons);
-  const [name1, name2] = chooseRandom(names, 2);
-  const isStatementPositive = randomBool();
-  const isQuestionPositive = randomBool();
-  const swapNames = randomBool();
-
-  const statement = `${name1} is ${
-    isStatementPositive
-      ? pickRandom(comparison.s[0])
-      : pickRandom(comparison.s[1])
-  } ${name2}.`;
-
-  const question = `Who is ${isQuestionPositive ? comparison.q[0] : comparison.q[1]}?`;
-
-  const answer = isStatementPositive === isQuestionPositive ? name1 : name2;
-  const namesToCompare = swapNames ? [name2, name1] : [name1, name2];
-
-  return {
-    statement,
-    question,
-    answer,
-    namesToCompare,
-  };
-}
-
-const ReasoningTest = (props: {
-  onCorrectAnswer: () => void;
-  onIncorrectAnswer: () => void;
-}) => {
-  const { onCorrectAnswer, onIncorrectAnswer } = props;
-  const [question, setQuestion] = React.useState(generateQuestion());
-  const [isStatementPhase, setIsStatementPhase] = React.useState(true);
-
-  const onAnswer = (answer: string) => {
-    if (answer === question.answer) {
-      onCorrectAnswer();
-    } else {
-      onIncorrectAnswer();
-    }
-
-    setIsStatementPhase(true);
-    setQuestion(generateQuestion());
-  };
-
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>
-          {isStatementPhase ? question.statement : question.question}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        {isStatementPhase ? (
-          <Button onClick={() => setIsStatementPhase(false)}>
-            Show question
-          </Button>
-        ) : (
-          <div>
-            {question.namesToCompare.map((name) => (
-              <Button key={name} onClick={() => onAnswer(name)}>
-                {name}
-              </Button>
-            ))}
-          </div>
-        )}
-      </CardContent>
-    </Card>
-  );
-};
-
-export default ReasoningTest;
