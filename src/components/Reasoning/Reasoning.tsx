@@ -1,12 +1,6 @@
 import { chooseRandom, pickRandom, randomBool } from "@/random";
 import { Button } from "@components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@components/ui/card";
+import { Card, CardFooter, CardHeader, CardTitle } from "@components/ui/card";
 import { comparisons, names } from "@components/Reasoning/data";
 import React from "react";
 import type { TestProps } from "@components/types";
