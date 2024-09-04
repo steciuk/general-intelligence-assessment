@@ -1,3 +1,4 @@
+import Numbers from "@components/Numbers";
 import Perceptual from "@components/Perceptual";
 import Reasoning from "@components/Reasoning/Reasoning";
 import Test from "@components/Test";
@@ -8,6 +9,7 @@ const TestStarter = () => {
     <>
       <Test render={(props) => <Reasoning {...props} />} />
       <Test render={(props) => <Perceptual {...props} />} />
+      <Test render={(props) => <Numbers {...props} />} />
     </>
   );
 };

@@ -4,7 +4,7 @@ import { Button } from "@components/ui/button";
 import { Progress } from "@components/ui/progress";
 import React from "react";
 
-const MAX_TIME = 5 * 60; // 5 minutes
+const MAX_TIME = 8 * 60; // 5 minutes
 
 const Test = (props: { render: (props: TestProps) => React.ReactElement }) => {
   const [testState, setTestState] = React.useState<
