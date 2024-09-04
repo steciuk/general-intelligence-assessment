@@ -38,7 +38,7 @@ const Perceptual = (props: TestProps) => {
         ))}
       </CardContent>
       <CardFooter>
-        {Array.from({ length: 5 }, (_, i) => (
+        {Array.from({ length: question.columns.length + 1 }, (_, i) => (
           <Button key={i} onClick={() => onAnswer(i)}>
             {i}
           </Button>
@@ -50,21 +50,22 @@ const Perceptual = (props: TestProps) => {
 
 export default Perceptual;
 
-const letters = Array.from({ length: 26 }, (_, i) =>
+const LETTERS = Array.from({ length: 26 }, (_, i) =>
   String.fromCharCode(65 + i),
 );
+const NUM_COLUMNS = 4;
 
 function generateQuestion() {
-  const numSame = randomInt(0, 4);
-  const sameLetters = chooseRandom(letters, numSame, true);
+  const numSame = randomInt(0, NUM_COLUMNS);
+  const sameLetters = chooseRandom(LETTERS, numSame, true);
 
   let columns: [string, string][] = sameLetters.map((letter) => [
     letter.toLowerCase(),
     letter,
   ]);
 
-  for (let i = numSame; i < 4; i++) {
-    const [letter1, letter2] = chooseRandom(letters, 2, true);
+  for (let i = numSame; i < NUM_COLUMNS; i++) {
+    const [letter1, letter2] = chooseRandom(LETTERS, 2, true);
     columns.push([letter1.toLowerCase(), letter2]);
   }
 
