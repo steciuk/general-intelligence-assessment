@@ -45,7 +45,6 @@ const Test = (props: { render: (props: TestProps) => React.ReactElement }) => {
 
   return (
     <div>
-      <h1>Reasoning</h1>
       {testState === "not-started" ? (
         <Button onClick={() => setTestState("in-progress")}>Start Test</Button>
       ) : testState === "in-progress" ? (

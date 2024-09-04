@@ -1,6 +1,12 @@
-import { chooseRandom, pickRandom, randomBool } from "@/utils";
+import { chooseRandom, pickRandom, randomBool } from "@/random";
 import { Button } from "@components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@components/ui/card";
 import { comparisons, names } from "@components/Reasoning/data";
 import React from "react";
 import type { TestProps } from "@components/types";
@@ -28,7 +34,7 @@ const Reasoning = (props: TestProps) => {
           {isStatementPhase ? question.statement : question.question}
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardFooter>
         {isStatementPhase ? (
           <Button onClick={() => setIsStatementPhase(false)}>
             Show question
@@ -42,7 +48,7 @@ const Reasoning = (props: TestProps) => {
             ))}
           </div>
         )}
-      </CardContent>
+      </CardFooter>
     </Card>
   );
 };
@@ -51,7 +57,7 @@ export default Reasoning;
 
 function generateQuestion() {
   const comparison = pickRandom(comparisons);
-  const [name1, name2] = chooseRandom(names, 2);
+  const [name1, name2] = chooseRandom(names, 2, true);
   const isStatementPositive = randomBool();
   const isQuestionPositive = randomBool();
   const swapNames = randomBool();

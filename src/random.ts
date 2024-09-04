@@ -1,4 +1,4 @@
-export function chooseRandom<T>(arr: T[], num: number, unique = true): T[] {
+export function chooseRandom<T>(arr: T[], num: number, unique = false): T[] {
   if (unique && num > arr.length) {
     throw new Error("Cannot pick more unique items than the array has");
   }
@@ -28,4 +28,8 @@ export function pickRandom<T>(arr: T[]): T {
 
 export function randomBool(): boolean {
   return Math.random() < 0.5;
+}
+
+export function randomInt(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
