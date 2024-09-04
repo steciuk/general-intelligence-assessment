@@ -1,9 +1,9 @@
 ---
 import { Button } from "@components/ui/button";
 import Layout from "../layouts/Layout.astro";
+import Reasoning from "@components/Reasoning/Reasoning";
 ---
 
 <Layout title="Welcome to Astro.">
-  <main class="">Hello, World</main>
-  <Button>Hi</Button>
+  <Reasoning client:load />
 </Layout>
