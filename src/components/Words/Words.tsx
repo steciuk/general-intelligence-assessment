@@ -1,4 +1,5 @@
 import { chooseRandom, pickRandom } from "@/random";
+import TestButton from "@components/TestButton";
 import TestIntro from "@components/TestIntro";
 import { TestName, type TestProps } from "@components/types";
 import { Button } from "@components/ui/button";
@@ -38,11 +39,11 @@ const Words = (props: TestProps) => {
       <CardHeader>
         <CardTitle>Which word doesn't belong?</CardTitle>
       </CardHeader>
-      <CardFooter className="flex">
+      <CardFooter className="flex flex-wrap justify-center gap-4">
         {question.words.map((word) => (
-          <Button key={word} onClick={() => onAnswer(word)}>
+          <TestButton key={word} onClick={() => onAnswer(word)}>
             {word}
-          </Button>
+          </TestButton>
         ))}
       </CardFooter>
     </Card>

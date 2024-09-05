@@ -45,13 +45,15 @@ const Test = (props: {
   }, [testState, time]);
 
   return (
-    <div>
+    <div className="space-y-4">
       {testState === "in-progress" && (
-        <>
+        <div className="space-y-2">
           <Progress value={(time / MAX_TIME) * 100} reverse />
-          <p>Correct answers: {numCorrect}</p>
-          <p>Incorrect answers: {numIncorrect}</p>
-        </>
+          <div className="flex justify-between">
+            <p>Correct: {numCorrect}</p>
+            <p>Incorrect: {numIncorrect}</p>
+          </div>
+        </div>
       )}
       {props.children({
         onCorrectAnswer,

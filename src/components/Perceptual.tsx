@@ -1,4 +1,5 @@
 import { chooseRandom, randomInt } from "@/random";
+import TestButton from "@components/TestButton";
 import TestIntro from "@components/TestIntro";
 import { TestName, type TestProps } from "@components/types";
 import { Button } from "@components/ui/button";
@@ -43,19 +44,19 @@ const Perceptual = (props: TestProps) => {
       <CardHeader>
         <CardTitle>How many columns have the same letter?</CardTitle>
       </CardHeader>
-      <CardContent className="flex gap-6 text-2xl">
+      <CardContent className="flex justify-center gap-4 text-2xl md:gap-6">
         {question.columns.map(([lowercase, uppercase], i) => (
-          <div className="space-y-6" key={i}>
+          <div className="space-y-4 md:space-y-6" key={i}>
             <div className="text-center">{lowercase}</div>
             <div className="text-center">{uppercase}</div>
           </div>
         ))}
       </CardContent>
-      <CardFooter>
+      <CardFooter className="flex flex-wrap justify-center gap-2">
         {Array.from({ length: question.columns.length + 1 }, (_, i) => (
-          <Button key={i} onClick={() => onAnswer(i)}>
+          <TestButton key={i} onClick={() => onAnswer(i)}>
             {i}
-          </Button>
+          </TestButton>
         ))}
       </CardFooter>
     </Card>

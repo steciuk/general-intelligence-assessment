@@ -1,4 +1,5 @@
 import { chooseRandom, pickRandom, randomBool, randomInt } from "@/random";
+import TestButton from "@components/TestButton";
 import TestIntro from "@components/TestIntro";
 import { TestName, type TestProps } from "@components/types";
 import { Button } from "@components/ui/button";
@@ -49,11 +50,11 @@ const Spatial = (props: TestProps) => {
           not.
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex gap-6 text-2xl">
+      <CardContent className="flex justify-center gap-6 text-2xl">
         {question.columns.map((letters, i) => (
-          <div className="space-y-6" key={i}>
-            <Card>
-              <CardContent className="p-4">
+          <div key={i}>
+            <Card className="rounded-sm p-0">
+              <CardContent className="px-6 py-4">
                 {letters.map(({ isMirrored, rotation }, j) => (
                   <div
                     key={j}
@@ -70,11 +71,11 @@ const Spatial = (props: TestProps) => {
           </div>
         ))}
       </CardContent>
-      <CardFooter>
+      <CardFooter className="flex flex-wrap justify-center gap-4">
         {Array.from({ length: question.columns.length + 1 }, (_, i) => (
-          <Button key={i} onClick={() => onAnswer(i)}>
+          <TestButton key={i} onClick={() => onAnswer(i)}>
             {i}
-          </Button>
+          </TestButton>
         ))}
       </CardFooter>
     </Card>

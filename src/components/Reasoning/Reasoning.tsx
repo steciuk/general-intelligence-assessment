@@ -1,10 +1,10 @@
 import { chooseRandom, pickRandom, randomBool } from "@/random";
-import { Button } from "@components/ui/button";
 import { Card, CardFooter, CardHeader, CardTitle } from "@components/ui/card";
 import { comparisons, names } from "@components/Reasoning/data";
 import React from "react";
 import { TestName, type TestProps } from "@components/types";
 import TestIntro from "@components/TestIntro";
+import TestButton from "@components/TestButton";
 
 const Reasoning = (props: TestProps) => {
   const { onCorrectAnswer, onIncorrectAnswer, testState } = props;
@@ -40,17 +40,17 @@ const Reasoning = (props: TestProps) => {
           {isStatementPhase ? question.statement : question.question}
         </CardTitle>
       </CardHeader>
-      <CardFooter>
+      <CardFooter className="flex justify-center">
         {isStatementPhase ? (
-          <Button onClick={() => setIsStatementPhase(false)}>
-            Show question
-          </Button>
+          <TestButton onClick={() => setIsStatementPhase(false)}>
+            Show the question
+          </TestButton>
         ) : (
-          <div>
+          <div className="flex flex-wrap justify-center gap-4">
             {question.namesToCompare.map((name) => (
-              <Button key={name} onClick={() => onAnswer(name)}>
+              <TestButton key={name} onClick={() => onAnswer(name)}>
                 {name}
-              </Button>
+              </TestButton>
             ))}
           </div>
         )}

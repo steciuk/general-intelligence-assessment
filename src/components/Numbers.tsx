@@ -1,4 +1,5 @@
 import { chooseRandom, randomBool, randomInt } from "@/random";
+import TestButton from "@components/TestButton";
 import TestIntro from "@components/TestIntro";
 import { TestName, type TestProps } from "@components/types";
 import { Button } from "@components/ui/button";
@@ -37,11 +38,11 @@ const Numbers = (props: TestProps) => {
       <CardHeader>
         <CardTitle>Which number is furthest from the median?</CardTitle>
       </CardHeader>
-      <CardFooter className="flex">
+      <CardFooter className="flex flex-wrap justify-center gap-4">
         {question.numbers.map((number) => (
-          <Button key={number} onClick={() => onAnswer(number)}>
+          <TestButton key={number} onClick={() => onAnswer(number)}>
             {number}
-          </Button>
+          </TestButton>
         ))}
       </CardFooter>
     </Card>

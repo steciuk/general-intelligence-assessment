@@ -43,12 +43,13 @@ const TestSelectorOption = React.forwardRef<
           <Checkbox checked={selected} onCheckedChange={onCheckedChange} />
           <div>{name}</div>
         </Label>
-        <div>
+        <div className="flex gap-2">
           <Button
             size="icon"
             disabled={upDisabled}
             onClick={() => onMoveUp(name)}
             variant="ghost"
+            className="h-8 w-8"
           >
             <ArrowUp />
           </Button>
@@ -57,6 +58,7 @@ const TestSelectorOption = React.forwardRef<
             disabled={downDisabled}
             onClick={() => onMoveDown(name)}
             variant="ghost"
+            className="h-8 w-8"
           >
             <ArrowDown />
           </Button>
