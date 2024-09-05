@@ -1,9 +1,11 @@
 ---
 import { Button } from "@components/ui/button";
 import Layout from "../layouts/Layout.astro";
-import TestStarter from "@components/TestStarter";
+import TestSelector from "@components/TestSelector/TestSelector";
 ---
 
 <Layout title="Welcome to Astro.">
-  <TestStarter client:load />
+  <main class="container mx-auto max-w-xl py-6">
+    <TestSelector client:load />
+  </main>
 </Layout>

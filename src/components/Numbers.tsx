@@ -1,12 +1,13 @@
 import { chooseRandom, randomBool, randomInt } from "@/random";
-import type { TestProps } from "@components/types";
+import TestIntro from "@components/TestIntro";
+import { TestName, type TestProps } from "@components/types";
 import { Button } from "@components/ui/button";
 import { Card, CardHeader, CardTitle, CardFooter } from "@components/ui/card";
 import React from "react";
 
 const Numbers = (props: TestProps) => {
-  const { onCorrectAnswer, onIncorrectAnswer } = props;
-  const [question, setQuestion] = React.useState(generateQuestion());
+  const { onCorrectAnswer, onIncorrectAnswer, testState } = props;
+  const [question, setQuestion] = React.useState(generateQuestion);
 
   const onAnswer = (answer: number) => {
     if (answer === question.answer) {
@@ -17,6 +18,19 @@ const Numbers = (props: TestProps) => {
 
     setQuestion(generateQuestion());
   };
+
+  if (testState === "intro")
+    return (
+      <TestIntro
+        testName={TestName.NUMBERS_SPEED_AND_ACCURACY}
+        onStartTest={props.onStartTest}
+      >
+        <p>
+          In this test, you will be presented with three numbers. Your task is
+          to identify which number is furthest from the median.
+        </p>
+      </TestIntro>
+    );
 
   return (
     <Card>

@@ -1,13 +1,14 @@
 import { chooseRandom, pickRandom } from "@/random";
-import type { TestProps } from "@components/types";
+import TestIntro from "@components/TestIntro";
+import { TestName, type TestProps } from "@components/types";
 import { Button } from "@components/ui/button";
 import { Card, CardHeader, CardTitle, CardFooter } from "@components/ui/card";
 import { categories } from "@components/Words/data";
 import React from "react";
 
 const Words = (props: TestProps) => {
-  const { onCorrectAnswer, onIncorrectAnswer } = props;
-  const [question, setQuestion] = React.useState(generateQuestion());
+  const { onCorrectAnswer, onIncorrectAnswer, testState } = props;
+  const [question, setQuestion] = React.useState(generateQuestion);
 
   const onAnswer = (answer: string) => {
     if (answer === question.answer) {
@@ -18,6 +19,19 @@ const Words = (props: TestProps) => {
 
     setQuestion(generateQuestion());
   };
+
+  if (testState === "intro")
+    return (
+      <TestIntro
+        testName={TestName.WORDS_MEANING}
+        onStartTest={props.onStartTest}
+      >
+        <p>
+          In this test, you will be presented with three words. Your task is to
+          identify which word doesn't belong.
+        </p>
+      </TestIntro>
+    );
 
   return (
     <Card>

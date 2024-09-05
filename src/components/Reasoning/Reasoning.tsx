@@ -3,11 +3,12 @@ import { Button } from "@components/ui/button";
 import { Card, CardFooter, CardHeader, CardTitle } from "@components/ui/card";
 import { comparisons, names } from "@components/Reasoning/data";
 import React from "react";
-import type { TestProps } from "@components/types";
+import { TestName, type TestProps } from "@components/types";
+import TestIntro from "@components/TestIntro";
 
 const Reasoning = (props: TestProps) => {
-  const { onCorrectAnswer, onIncorrectAnswer } = props;
-  const [question, setQuestion] = React.useState(generateQuestion());
+  const { onCorrectAnswer, onIncorrectAnswer, testState } = props;
+  const [question, setQuestion] = React.useState(generateQuestion);
   const [isStatementPhase, setIsStatementPhase] = React.useState(true);
 
   const onAnswer = (answer: string) => {
@@ -20,6 +21,17 @@ const Reasoning = (props: TestProps) => {
     setIsStatementPhase(true);
     setQuestion(generateQuestion());
   };
+
+  if (testState === "intro")
+    return (
+      <TestIntro testName={TestName.REASONING} onStartTest={props.onStartTest}>
+        <p>
+          In this test, you will be presented with a statement and a question.
+          The statement will compare two names, and the question will ask you to
+          identify which name fits the comparison in question.
+        </p>
+      </TestIntro>
+    );
 
   return (
     <Card>

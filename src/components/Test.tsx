@@ -7,27 +7,26 @@ import React from "react";
 const MAX_TIME = 8 * 60; // 5 minutes
 
 const Test = (props: {
+  onCompleted: (numCorrect: number, numIncorrect: number) => void;
   children: (props: TestProps) => React.ReactElement;
 }) => {
-  const [testState, setTestState] = React.useState<
-    "not-started" | "in-progress" | "completed"
-  >("not-started");
+  const [testState, setTestState] = React.useState<"intro" | "in-progress">(
+    "intro",
+  );
   const [time, setTime] = React.useState(0);
-  const [correctAnswers, setCorrectAnswers] = React.useState(0);
-  const [incorrectAnswers, setIncorrectAnswers] = React.useState(0);
-
-  const resetTest = () => {
-    setTime(0);
-    setCorrectAnswers(0);
-    setIncorrectAnswers(0);
-  };
+  const [numCorrect, setNumCorrect] = React.useState(0);
+  const [numIncorrect, setNumIncorrect] = React.useState(0);
 
   const onCorrectAnswer = () => {
-    setCorrectAnswers((prev) => prev + 1);
+    setNumCorrect((prev) => prev + 1);
   };
 
   const onIncorrectAnswer = () => {
-    setIncorrectAnswers((prev) => prev + 1);
+    setNumIncorrect((prev) => prev + 1);
+  };
+
+  const onStartTest = () => {
+    setTestState("in-progress");
   };
 
   React.useEffect(() => {
@@ -35,7 +34,7 @@ const Test = (props: {
       const interval = setInterval(() => {
         if (time >= MAX_TIME) {
           clearInterval(interval);
-          setTestState("completed");
+          props.onCompleted(numCorrect, numIncorrect);
           return;
         }
         setTime((prev) => prev + 1);
@@ -47,19 +46,19 @@ const Test = (props: {
 
   return (
     <div>
-      {testState === "not-started" ? (
-        <Button onClick={() => setTestState("in-progress")}>Start Test</Button>
-      ) : testState === "in-progress" ? (
+      {testState === "in-progress" && (
         <>
           <Progress value={(time / MAX_TIME) * 100} reverse />
-          <p>Correct answers: {correctAnswers}</p>
-          <p>Incorrect answers: {incorrectAnswers}</p>
-          <Button onClick={resetTest}>Reset Test</Button>
-          {props.children({ onCorrectAnswer, onIncorrectAnswer })}
+          <p>Correct answers: {numCorrect}</p>
+          <p>Incorrect answers: {numIncorrect}</p>
         </>
-      ) : (
-        <div>Completed</div>
       )}
+      {props.children({
+        onCorrectAnswer,
+        onIncorrectAnswer,
+        testState,
+        onStartTest,
+      })}
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import { chooseRandom, randomInt } from "@/random";
-import type { TestProps } from "@components/types";
+import TestIntro from "@components/TestIntro";
+import { TestName, type TestProps } from "@components/types";
 import { Button } from "@components/ui/button";
 import {
   Card,
@@ -11,8 +12,8 @@ import {
 import React from "react";
 
 const Perceptual = (props: TestProps) => {
-  const { onCorrectAnswer, onIncorrectAnswer } = props;
-  const [question, setQuestion] = React.useState(generateQuestion());
+  const { onCorrectAnswer, onIncorrectAnswer, testState } = props;
+  const [question, setQuestion] = React.useState(generateQuestion);
 
   const onAnswer = (answer: number) => {
     if (answer === question.answer) {
@@ -23,6 +24,19 @@ const Perceptual = (props: TestProps) => {
 
     setQuestion(generateQuestion());
   };
+
+  if (testState === "intro")
+    return (
+      <TestIntro
+        testName={TestName.PERCEPTUAL_SPEED}
+        onStartTest={props.onStartTest}
+      >
+        <p>
+          In this test, you will be presented with four columns of letters. Your
+          task is to identify how many columns have the same letter.
+        </p>
+      </TestIntro>
+    );
 
   return (
     <Card>

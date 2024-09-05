@@ -1,5 +1,6 @@
 import { chooseRandom, pickRandom, randomBool, randomInt } from "@/random";
-import type { TestProps } from "@components/types";
+import TestIntro from "@components/TestIntro";
+import { TestName, type TestProps } from "@components/types";
 import { Button } from "@components/ui/button";
 import {
   Card,
@@ -12,8 +13,8 @@ import {
 import React from "react";
 
 const Spatial = (props: TestProps) => {
-  const { onCorrectAnswer, onIncorrectAnswer } = props;
-  const [question, setQuestion] = React.useState(generateQuestion());
+  const { onCorrectAnswer, onIncorrectAnswer, testState } = props;
+  const [question, setQuestion] = React.useState(generateQuestion);
 
   const onAnswer = (answer: number) => {
     if (answer === question.answer) {
@@ -25,12 +26,27 @@ const Spatial = (props: TestProps) => {
     setQuestion(generateQuestion());
   };
 
+  if (testState === "intro")
+    return (
+      <TestIntro
+        testName={TestName.SPATIAL_VISUALIZATION}
+        onStartTest={props.onStartTest}
+      >
+        <p>
+          In this test, you will be presented with two columns of letters. Your
+          task is to identify how many boxes have the same letter. Rotated
+          letters are considered the same, while mirrored letters are not.
+        </p>
+      </TestIntro>
+    );
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>How many boxes have the same letter?</CardTitle>
         <CardDescription>
-          Rotated letters are considered, while mirrored letters are not.
+          Rotated letters are considered the same, while mirrored letters are
+          not.
         </CardDescription>
       </CardHeader>
       <CardContent className="flex gap-6 text-2xl">
