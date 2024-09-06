@@ -12,8 +12,6 @@ import type { CheckedState } from "@radix-ui/react-checkbox";
 import "@components/TestApp/TestSelector/TestSelector.css";
 import React from "react";
 import { TestName } from "@components/TestApp/types";
-import TestPerformer from "@components/TestApp/TestPerformer";
-import { ArrowLeft } from "lucide-react";
 import TestSelectorOption from "@components/TestApp/TestSelector/TestSelectorOption";
 
 export type TestOption = {

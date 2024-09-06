@@ -1,11 +1,44 @@
 ---
+import Link from "@components/Link.astro";
 import { Button } from "@components/ui/button";
-import Layout from "../layouts/Layout.astro";
-import TestApp from "@components/TestApp/TestApp";
+import { Card, CardContent, CardFooter, CardHeader } from "@components/ui/card";
+import { Separator } from "@components/ui/separator";
+import Layout from "@layouts/Layout.astro";
 ---
 
-<Layout title="Welcome to Astro.">
-  <main class="container mx-auto max-w-xl py-6">
-    <TestApp client:load />
-  </main>
+<Layout>
+  <Card>
+    <CardHeader>
+      <h1 class="text-center text-2xl font-bold">
+        General Intelligence Assessment
+      </h1>
+    </CardHeader>
+    <CardContent>
+      <p class="text-justify">
+        As a part of a job application process, I was asked to complete a <Link
+          href="https://www.thomas.co/assessments/general-intelligence-assessment-gia"
+          targetBlank
+          noreferrer>Thomas GIA test</Link
+        >. As I haven't found any proper practice materials, I decided to create
+        a simple web app to test myself before the real thing.
+      </p>
+      <Separator className="my-4" />
+      <p class="text-justify text-sm">
+        I am not affiliated with Thomas International in any way. This is a
+        personal project. I do not have access to the real test questions. I do
+        not provide any guarantees that the questions in this app are similar to
+        the real test.
+      </p>
+      <Separator className="my-4 text-justify" />
+      <p class="text-sm text-destructive">
+        The app is still in development. Any parts of the app may change at any
+        time. You may loose your results history.
+      </p>
+    </CardContent>
+    <CardFooter className="flex justify-center">
+      <Button>
+        <a href="/test">Start the tests</a>
+      </Button>
+    </CardFooter>
+  </Card>
 </Layout>

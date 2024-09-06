@@ -1,39 +1,47 @@
 ---
-import { website } from "@/links";
+import Footer from "@components/Footer.astro";
 import "@styles/global.css";
 import { SEO } from "astro-seo";
 
 interface Props {
-  title: string;
+  subtitle?: string;
 }
 
-const { title } = Astro.props;
-const description = "// TODO: Add a description";
+const { subtitle } = Astro.props;
+const description = "Thomas GIA test practice app";
+
+const title =
+  subtitle && subtitle.trim() !== "General Intelligence Assessment"
+    ? `${subtitle} | General Intelligence Assessment`
+    : "General Intelligence Assessment";
 ---
 
 <!doctype html>
 <html lang="en">
-  <SEO
-    title={title}
-    description={description}
-    charset="UTF-8"
-    openGraph={{
-      basic: {
-        title: title,
-        type: "website",
-        image: `${website}/og-image.png`, // TODO: Add an og-image
-      },
-      optional: {
-        description: description,
-        siteName: "Adam Steciuk",
-      },
-    }}
-  />
+  <SEO title={title} description={description} charset="UTF-8" />
+  {
+    /* openGraph={{
+    basic: {
+      title: title,
+      type: "website",
+      image: `${website}/og-image.png`, // TODO: Add an og-image
+    },
+    optional: {
+      description: description,
+      siteName: "Adam Steciuk",
+    },
+  }} */
+  }
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="generator" content={Astro.generator} />
   <meta name="author" content="Adam Steciuk" />
-  <body class="bg-background font-sans text-foreground">
-    <slot />
+  <body
+    class="flex min-h-screen flex-col bg-background font-sans text-foreground"
+  >
+    <main class="container mx-auto max-w-xl flex-grow py-6">
+      <slot />
+    </main>
+    <Footer />
   </body>
 </html>

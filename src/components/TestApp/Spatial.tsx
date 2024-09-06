@@ -2,7 +2,6 @@ import { chooseRandom, pickRandom, randomBool, randomInt } from "@/random";
 import TestButton from "@components/TestApp/TestButton";
 import TestIntro from "@components/TestApp/TestIntro";
 import { TestName, type TestProps } from "@components/TestApp/types";
-import { Button } from "@components/ui/button";
 import {
   Card,
   CardHeader,
@@ -33,7 +32,7 @@ const Spatial = (props: TestProps) => {
         testName={TestName.SPATIAL_VISUALIZATION}
         onStartTest={props.onStartTest}
       >
-        <p>
+        <p className="text-justify">
           In this test, you will be presented with two columns of letters. Your
           task is to identify how many boxes have the same letter. Rotated
           letters are considered the same, while mirrored letters are not.

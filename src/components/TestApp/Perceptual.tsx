@@ -2,7 +2,6 @@ import { chooseRandom, randomInt } from "@/random";
 import TestButton from "@components/TestApp/TestButton";
 import TestIntro from "@components/TestApp/TestIntro";
 import { TestName, type TestProps } from "@components/TestApp/types";
-import { Button } from "@components/ui/button";
 import {
   Card,
   CardContent,
@@ -32,7 +31,7 @@ const Perceptual = (props: TestProps) => {
         testName={TestName.PERCEPTUAL_SPEED}
         onStartTest={props.onStartTest}
       >
-        <p>
+        <p className="text-justify">
           In this test, you will be presented with four columns of letters. Your
           task is to identify how many columns have the same letter.
         </p>

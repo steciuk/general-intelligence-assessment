@@ -6,7 +6,7 @@ import {
   type ChartConfig,
 } from "@components/ui/chart";
 import React from "react";
-import { Area, AreaChart, Line, LineChart } from "recharts";
+import { Area, AreaChart } from "recharts";
 
 export type ScoredResult = Pick<TestResult, "numCorrect" | "numIncorrect"> & {
   score: number;

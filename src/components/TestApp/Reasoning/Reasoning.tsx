@@ -25,10 +25,10 @@ const Reasoning = (props: TestProps) => {
   if (testState === "intro")
     return (
       <TestIntro testName={TestName.REASONING} onStartTest={props.onStartTest}>
-        <p>
+        <p className="text-justify">
           In this test, you will be presented with a statement and a question.
           The statement will compare two names, and the question will ask you to
-          identify which name fits the comparison in question.
+          identify which name fits the comparison.
         </p>
       </TestIntro>
     );

@@ -1,0 +1,19 @@
+---
+interface Props {
+  href: string;
+  targetBlank?: boolean;
+  noreferrer?: boolean;
+}
+
+const { href, targetBlank, noreferrer } = Astro.props;
+
+const rel = targetBlank
+  ? noreferrer
+    ? "noopener noreferrer"
+    : "noopener"
+  : undefined;
+
+const target = targetBlank ? "_blank" : undefined;
+---
+
+<a {href} {rel} {target} class="font-semibold hover:underline"><slot /></a>
