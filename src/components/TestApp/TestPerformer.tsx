@@ -9,9 +9,8 @@ import Numbers from "@components/TestApp/Numbers";
 import Perceptual from "@components/TestApp/Perceptual";
 import Reasoning from "@components/TestApp/Reasoning/Reasoning";
 import Spatial from "@components/TestApp/Spatial";
-import Test from "@components/TestApp/Test";
+import Test from "@components/TestApp/TestContainer/TestContainer";
 import Words from "@components/TestApp/Words/Words";
-import TestsResults from "@components/TestApp/TestsResults";
 
 const TEST_MAP = {
   [TestName.REASONING]: Reasoning,
@@ -33,15 +32,17 @@ const TestPerformer = (props: {
   const CurrentTest = TEST_MAP[currentTestName];
 
   const onTestCompleted = (numCorrect: number, numIncorrect: number) => {
-    setTestResults((results) => [
-      ...results,
+    const newResults = [
+      ...testResults,
       { testName: currentTestName, numCorrect, numIncorrect },
-    ]);
+    ];
 
     if (currentTestIndex === tests.length - 1) {
-      onCompleted(testResults);
+      onCompleted(newResults);
+      return;
     }
 
+    setTestResults(newResults);
     setCurrentTestIndex((index) => index + 1);
   };
 

@@ -1,9 +1,11 @@
 import type { TestProps } from "@components/TestApp/types";
 import { Progress } from "@components/ui/progress";
 import React from "react";
+import "@components/TestApp/TestContainer/TestContainer.css";
+import { Currency } from "lucide-react";
 
-const MAX_TIME = 2 * 60;
-// const MAX_TIME = 2;
+// const MAX_TIME = 2 * 60;
+const MAX_TIME = 2;
 
 const Test = (props: {
   onCompleted: (numCorrect: number, numIncorrect: number) => void;
@@ -15,13 +17,28 @@ const Test = (props: {
   const [time, setTime] = React.useState(0);
   const [numCorrect, setNumCorrect] = React.useState(0);
   const [numIncorrect, setNumIncorrect] = React.useState(0);
+  const testContainerRef = React.useRef<HTMLDivElement>(null);
 
   const onCorrectAnswer = () => {
     setNumCorrect((prev) => prev + 1);
+
+    testContainerRef.current &&
+      testContainerRef.current.setAttribute("data-answer", "correct");
+    setTimeout(() => {
+      testContainerRef.current &&
+        testContainerRef.current.removeAttribute("data-answer");
+    }, 300);
   };
 
   const onIncorrectAnswer = () => {
     setNumIncorrect((prev) => prev + 1);
+
+    testContainerRef.current &&
+      testContainerRef.current.setAttribute("data-answer", "incorrect");
+    setTimeout(() => {
+      testContainerRef.current &&
+        testContainerRef.current.removeAttribute("data-answer");
+    }, 300);
   };
 
   const onStartTest = () => {
@@ -46,20 +63,16 @@ const Test = (props: {
   return (
     <div className="space-y-4">
       {testState === "in-progress" && (
-        <div className="space-y-2">
-          <Progress value={(time / MAX_TIME) * 100} reverse />
-          <div className="flex justify-between">
-            <p>Correct: {numCorrect}</p>
-            <p>Incorrect: {numIncorrect}</p>
-          </div>
-        </div>
+        <Progress value={(time / MAX_TIME) * 100} reverse />
       )}
-      {props.children({
-        onCorrectAnswer,
-        onIncorrectAnswer,
-        testState,
-        onStartTest,
-      })}
+      <div className="test-container transition-shadow" ref={testContainerRef}>
+        {props.children({
+          onCorrectAnswer,
+          onIncorrectAnswer,
+          testState,
+          onStartTest,
+        })}
+      </div>
     </div>
   );
 };

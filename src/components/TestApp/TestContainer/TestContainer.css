@@ -1,0 +1,7 @@
+.test-container[data-answer="correct"] {
+  @apply shadow-xl shadow-chart-2;
+}
+
+.test-container[data-answer="incorrect"] {
+  @apply shadow-xl shadow-destructive;
+}
