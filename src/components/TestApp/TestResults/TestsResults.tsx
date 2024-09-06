@@ -7,6 +7,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@components/ui/card";
+import ResultsChart, {
+  type ScoredResult,
+} from "@components/TestApp/TestResults/ResultsChart";
 
 function createScoringFunction(numPossibleAnswers: number) {
   return (numCorrect: number, numIncorrect: number) => {
@@ -58,17 +61,10 @@ const TestsResults = (props: {
   const results = React.useMemo(() => {
     const lastMaxTests = previousResults.slice(-MAX_TEST_HISTORY);
 
-    const resultsMap = new Map<
-      TestName,
-      { numCorrect: number; numIncorrect: number; score: number }[]
-    >();
+    const resultsMap = new Map<TestName, ScoredResult[]>();
 
     currentResults.forEach(({ testName, ...rest }) => {
-      const results: {
-        numCorrect: number;
-        numIncorrect: number;
-        score: number;
-      }[] = [];
+      const results: ScoredResult[] = [];
 
       for (const testResults of lastMaxTests) {
         const testResult = testResults.find(
@@ -100,36 +96,36 @@ const TestsResults = (props: {
 
   return (
     <ol className="space-y-4">
-      {currentResults.map((result) => (
-        <Card key={result.testName}>
-          <CardHeader>
-            <CardTitle>{result.testName}</CardTitle>
-          </CardHeader>
-          <CardContent className="flex items-center justify-between text-xl">
-            <div className="flex flex-wrap overflow-hidden rounded-sm text-center">
-              <div className="min-w-12 bg-chart-2 p-2 text-destructive-foreground">
-                {result.numCorrect}
+      {currentResults.map((result) => {
+        const testResults = results.get(result.testName);
+
+        return (
+          <Card key={result.testName}>
+            <CardHeader>
+              <CardTitle>{result.testName}</CardTitle>
+            </CardHeader>
+            <CardContent className="flex items-center justify-between text-xl">
+              <div className="flex flex-wrap overflow-hidden rounded-sm text-center">
+                <div className="min-w-12 bg-chart-2 p-2 text-destructive-foreground">
+                  {result.numCorrect}
+                </div>
+                <div className="min-w-12 bg-destructive p-2 text-destructive-foreground">
+                  {result.numIncorrect}
+                </div>
               </div>
-              <div className="min-w-12 bg-destructive p-2 text-destructive-foreground">
-                {result.numIncorrect}
+              <div className="font-bold">
+                {SCORING_FUNCTIONS[result.testName](
+                  result.numCorrect,
+                  result.numIncorrect,
+                )}
               </div>
-            </div>
-            <div className="font-bold">
-              {SCORING_FUNCTIONS[result.testName](
-                result.numCorrect,
-                result.numIncorrect,
-              )}
-            </div>
-          </CardContent>
-          <CardFooter>
-            <div className="flex flex-wrap gap-4">
-              {results
-                .get(result.testName)
-                ?.map(({ score }, i) => <div key={i}>{score}</div>)}
-            </div>
-          </CardFooter>
-        </Card>
-      ))}
+            </CardContent>
+            <CardFooter>
+              {testResults && <ResultsChart results={testResults} />}
+            </CardFooter>
+          </Card>
+        );
+      })}
     </ol>
   );
 };

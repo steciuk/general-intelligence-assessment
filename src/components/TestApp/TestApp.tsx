@@ -2,7 +2,7 @@ import TestPerformer from "@components/TestApp/TestPerformer";
 import TestSelector, {
   type TestOption,
 } from "@components/TestApp/TestSelector/TestSelector";
-import TestsResults from "@components/TestApp/TestsResults";
+import TestsResults from "@components/TestApp/TestResults/TestsResults";
 import { TestName, type TestResult } from "@components/TestApp/types";
 import { Button } from "@components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -27,17 +27,7 @@ const TestApp = () => {
   ]);
 
   const onCompleted = (testResults: TestResult[]) => {
-    let previousResultsWithTimestamps:
-      | { timestamp: string; results: TestResult[] }[]
-      | null = null;
-
-    try {
-      previousResultsWithTimestamps = JSON.parse(
-        localStorage.getItem("testResults") ?? "null",
-      );
-    } catch (error) {
-      console.error("Error parsing previous results", error);
-    }
+    const previousResultsWithTimestamps = getPreviousResults();
 
     const timeStamp = new Date().toISOString();
     const newResults = {
@@ -47,15 +37,12 @@ const TestApp = () => {
 
     localStorage.setItem(
       "testResults",
-      JSON.stringify(
-        previousResultsWithTimestamps
-          ? [...previousResultsWithTimestamps, newResults]
-          : [newResults],
-      ),
+      JSON.stringify([...previousResultsWithTimestamps, newResults]),
     );
 
-    const previousResults =
-      previousResultsWithTimestamps?.map(({ results }) => results) ?? [];
+    const previousResults = previousResultsWithTimestamps.map(
+      ({ results }) => results,
+    );
 
     setPhase({ name: "results", currentResults: testResults, previousResults });
   };
@@ -105,3 +92,19 @@ const TestApp = () => {
 };
 
 export default TestApp;
+
+type ResultsWithTimestamp = { timestamp: string; results: TestResult[] };
+
+function getPreviousResults(): ResultsWithTimestamp[] {
+  let previousResultsWithTimestamps: ResultsWithTimestamp[] | null = null;
+
+  try {
+    previousResultsWithTimestamps = JSON.parse(
+      localStorage.getItem("testResults") ?? "null",
+    );
+  } catch (error) {
+    console.error("Error parsing previous results", error);
+  }
+
+  return previousResultsWithTimestamps ?? [];
+}
