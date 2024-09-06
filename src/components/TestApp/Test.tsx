@@ -1,10 +1,8 @@
-import Reasoning from "@components/TestApp/Reasoning/Reasoning";
 import type { TestProps } from "@components/TestApp/types";
-import { Button } from "@components/ui/button";
 import { Progress } from "@components/ui/progress";
 import React from "react";
 
-const MAX_TIME = 8 * 60; // 5 minutes
+const MAX_TIME = 2 * 60;
 
 const Test = (props: {
   onCompleted: (numCorrect: number, numIncorrect: number) => void;

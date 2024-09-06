@@ -5,6 +5,12 @@ export type TestProps = {
   onIncorrectAnswer: () => void;
 };
 
+export type TestResult = {
+  testName: TestName;
+  numCorrect: number;
+  numIncorrect: number;
+};
+
 export enum TestName {
   REASONING = "Reasoning",
   PERCEPTUAL_SPEED = "Perceptual Speed",

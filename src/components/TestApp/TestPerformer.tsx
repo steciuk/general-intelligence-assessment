@@ -1,4 +1,8 @@
-import { TestName, type TestProps } from "@components/TestApp/types";
+import {
+  TestName,
+  type TestProps,
+  type TestResult,
+} from "@components/TestApp/types";
 import React from "react";
 
 import Numbers from "@components/TestApp/Numbers";
@@ -7,6 +11,7 @@ import Reasoning from "@components/TestApp/Reasoning/Reasoning";
 import Spatial from "@components/TestApp/Spatial";
 import Test from "@components/TestApp/Test";
 import Words from "@components/TestApp/Words/Words";
+import TestsResults from "@components/TestApp/TestsResults";
 
 const TEST_MAP = {
   [TestName.REASONING]: Reasoning,
@@ -14,25 +19,34 @@ const TEST_MAP = {
   [TestName.NUMBERS_SPEED_AND_ACCURACY]: Numbers,
   [TestName.WORDS_MEANING]: Words,
   [TestName.SPATIAL_VISUALIZATION]: Spatial,
-} as const satisfies { [key in TestName]: (props: TestProps) => JSX.Element };
+} as const satisfies Record<TestName, (props: TestProps) => JSX.Element>;
 
 const TestPerformer = (props: { tests: TestName[] }) => {
   const { tests } = props;
   const [currentTestIndex, setCurrentTestIndex] = React.useState(0);
-  const CurrentTest = TEST_MAP[tests[currentTestIndex]];
+  const [testResults, setTestResults] = React.useState<TestResult[]>([]);
+
+  const currentTestName = tests[currentTestIndex];
+  const CurrentTest = TEST_MAP[currentTestName];
 
   const onCompleted = (numCorrect: number, numIncorrect: number) => {
+    setTestResults((results) => [
+      ...results,
+      { testName: currentTestName, numCorrect, numIncorrect },
+    ]);
+
     if (currentTestIndex === tests.length - 1) {
-      // TODO: Show results
-      console.log("All tests completed");
       return;
     }
 
     setCurrentTestIndex((index) => index + 1);
   };
 
+  if (testResults.length === tests.length)
+    return <TestsResults results={testResults} />;
+
   return (
-    <Test onCompleted={onCompleted}>
+    <Test onCompleted={onCompleted} key={currentTestName}>
       {(props) => <CurrentTest {...props} />}
     </Test>
   );
