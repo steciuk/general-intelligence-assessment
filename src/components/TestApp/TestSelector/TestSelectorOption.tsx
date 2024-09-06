@@ -1,4 +1,4 @@
-import type { TestName } from "@components/types";
+import type { TestName } from "@components/TestApp/types";
 import { Button } from "@components/ui/button";
 import { Card, CardHeader, type CardProps } from "@components/ui/card";
 import { Checkbox } from "@components/ui/checkbox";

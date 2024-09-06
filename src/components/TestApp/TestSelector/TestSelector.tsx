@@ -9,12 +9,12 @@ import {
 import { Checkbox } from "@components/ui/checkbox";
 import { Label } from "@components/ui/label";
 import type { CheckedState } from "@radix-ui/react-checkbox";
-import "@components/TestSelector/TestSelector.css";
+import "@components/TestApp/TestSelector/TestSelector.css";
 import React from "react";
-import { TestName } from "@components/types";
-import TestPerformer from "@components/TestPerformer";
+import { TestName } from "@components/TestApp/types";
+import TestPerformer from "@components/TestApp/TestPerformer";
 import { ArrowLeft } from "lucide-react";
-import TestSelectorOption from "@components/TestSelector/TestSelectorOption";
+import TestSelectorOption from "@components/TestApp/TestSelector/TestSelectorOption";
 
 const TestSelector = () => {
   const [phase, setPhase] = React.useState<"select" | "test">("select");
@@ -141,7 +141,7 @@ const TestSelector = () => {
 
   if (phase === "test")
     return (
-      <div className="space-y-4">
+      <section className="space-y-4">
         <Button
           onClick={() => setPhase("select")}
           size="icon"
@@ -154,7 +154,7 @@ const TestSelector = () => {
             .filter((option) => option.selected)
             .map((option) => option.name)}
         />
-      </div>
+      </section>
     );
 };
 

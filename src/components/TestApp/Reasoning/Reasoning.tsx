@@ -1,10 +1,10 @@
 import { chooseRandom, pickRandom, randomBool } from "@/random";
 import { Card, CardFooter, CardHeader, CardTitle } from "@components/ui/card";
-import { comparisons, names } from "@components/Reasoning/data";
+import { comparisons, names } from "@components/TestApp/Reasoning/data";
 import React from "react";
-import { TestName, type TestProps } from "@components/types";
-import TestIntro from "@components/TestIntro";
-import TestButton from "@components/TestButton";
+import { TestName, type TestProps } from "@components/TestApp/types";
+import TestIntro from "@components/TestApp/TestIntro";
+import TestButton from "@components/TestApp/TestButton";
 
 const Reasoning = (props: TestProps) => {
   const { onCorrectAnswer, onIncorrectAnswer, testState } = props;

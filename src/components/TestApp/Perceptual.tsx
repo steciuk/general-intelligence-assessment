@@ -1,7 +1,7 @@
 import { chooseRandom, randomInt } from "@/random";
-import TestButton from "@components/TestButton";
-import TestIntro from "@components/TestIntro";
-import { TestName, type TestProps } from "@components/types";
+import TestButton from "@components/TestApp/TestButton";
+import TestIntro from "@components/TestApp/TestIntro";
+import { TestName, type TestProps } from "@components/TestApp/types";
 import { Button } from "@components/ui/button";
 import {
   Card,

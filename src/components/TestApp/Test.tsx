@@ -1,5 +1,5 @@
-import Reasoning from "@components/Reasoning/Reasoning";
-import type { TestProps } from "@components/types";
+import Reasoning from "@components/TestApp/Reasoning/Reasoning";
+import type { TestProps } from "@components/TestApp/types";
 import { Button } from "@components/ui/button";
 import { Progress } from "@components/ui/progress";
 import React from "react";

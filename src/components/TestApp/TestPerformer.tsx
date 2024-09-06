@@ -1,12 +1,12 @@
-import { TestName, type TestProps } from "@components/types";
+import { TestName, type TestProps } from "@components/TestApp/types";
 import React from "react";
 
-import Numbers from "@components/Numbers";
-import Perceptual from "@components/Perceptual";
-import Reasoning from "@components/Reasoning/Reasoning";
-import Spatial from "@components/Spatial";
-import Test from "@components/Test";
-import Words from "@components/Words/Words";
+import Numbers from "@components/TestApp/Numbers";
+import Perceptual from "@components/TestApp/Perceptual";
+import Reasoning from "@components/TestApp/Reasoning/Reasoning";
+import Spatial from "@components/TestApp/Spatial";
+import Test from "@components/TestApp/Test";
+import Words from "@components/TestApp/Words/Words";
 
 const TEST_MAP = {
   [TestName.REASONING]: Reasoning,
