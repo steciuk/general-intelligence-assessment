@@ -43,33 +43,31 @@ const SCORING_FUNCTIONS = {
 
 const TestsResults = (props: { results: TestResult[] }) => {
   return (
-    <>
-      <ol className="space-y-4">
-        {props.results.map((result) => (
-          <Card key={result.testName}>
-            <CardHeader>
-              <CardTitle>{result.testName}</CardTitle>
-            </CardHeader>
-            <CardContent className="flex items-center justify-between text-xl">
-              <div className="flex flex-wrap overflow-hidden rounded-sm text-center">
-                <div className="min-w-12 bg-chart-2 p-2 text-destructive-foreground">
-                  {result.numCorrect}
-                </div>
-                <div className="min-w-12 bg-destructive p-2 text-destructive-foreground">
-                  {result.numIncorrect}
-                </div>
+    <ol className="space-y-4">
+      {props.results.map((result) => (
+        <Card key={result.testName}>
+          <CardHeader>
+            <CardTitle>{result.testName}</CardTitle>
+          </CardHeader>
+          <CardContent className="flex items-center justify-between text-xl">
+            <div className="flex flex-wrap overflow-hidden rounded-sm text-center">
+              <div className="min-w-12 bg-chart-2 p-2 text-destructive-foreground">
+                {result.numCorrect}
               </div>
-              <div className="font-bold">
-                {SCORING_FUNCTIONS[result.testName](
-                  result.numCorrect,
-                  result.numIncorrect,
-                )}
+              <div className="min-w-12 bg-destructive p-2 text-destructive-foreground">
+                {result.numIncorrect}
               </div>
-            </CardContent>
-          </Card>
-        ))}
-      </ol>
-    </>
+            </div>
+            <div className="font-bold">
+              {SCORING_FUNCTIONS[result.testName](
+                result.numCorrect,
+                result.numIncorrect,
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </ol>
   );
 };
 

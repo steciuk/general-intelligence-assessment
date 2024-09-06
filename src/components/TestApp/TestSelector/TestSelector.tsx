@@ -16,25 +16,26 @@ import TestPerformer from "@components/TestApp/TestPerformer";
 import { ArrowLeft } from "lucide-react";
 import TestSelectorOption from "@components/TestApp/TestSelector/TestSelectorOption";
 
-const TestSelector = () => {
-  const [phase, setPhase] = React.useState<"select" | "test">("select");
+export type TestOption = {
+  name: TestName;
+  selected: boolean;
+};
 
-  const [testOptions, setTestOptions] = React.useState([
-    { name: TestName.REASONING, selected: true },
-    { name: TestName.PERCEPTUAL_SPEED, selected: true },
-    { name: TestName.NUMBERS_SPEED_AND_ACCURACY, selected: true },
-    { name: TestName.WORDS_MEANING, selected: true },
-    { name: TestName.SPATIAL_VISUALIZATION, selected: true },
-  ]);
+const TestSelector = (props: {
+  testOptions: TestOption[];
+  setTestOptions: (options: TestOption[]) => void;
+  onStartTest: () => void;
+}) => {
+  const { testOptions, setTestOptions, onStartTest } = props;
+
   const [lastMovedUp, setLastMovedUp] = React.useState<string | null>(null);
   const [lastMovedDown, setLastMovedDown] = React.useState<string | null>(null);
 
   const onValueChange = (name: string, selected: boolean) => {
-    setTestOptions((options) =>
-      options.map((option) =>
-        option.name === name ? { ...option, selected } : option,
-      ),
+    const newTestOptions = testOptions.map((option) =>
+      option.name === name ? { ...option, selected } : option,
     );
+    setTestOptions(newTestOptions);
   };
 
   const onMoveUp = (name: string) => {
@@ -76,86 +77,54 @@ const TestSelector = () => {
         : "indeterminate";
 
   const onSelectAllChange = () => {
-    if (allSelected === true) {
-      setTestOptions((options) =>
-        options.map((option) => ({ ...option, selected: false })),
-      );
+    const newTestOptions =
+      allSelected === true
+        ? testOptions.map((option) => ({ ...option, selected: false }))
+        : testOptions.map((option) => ({ ...option, selected: true }));
 
-      return;
-    }
-
-    setTestOptions((options) =>
-      options.map((option) => ({ ...option, selected: true })),
-    );
+    setTestOptions(newTestOptions);
   };
 
-  if (phase === "select")
-    return (
-      <section className="flex flex-col gap-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Select the tests you want to take</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {testOptions.map((option, i) => (
-              <TestSelectorOption
-                key={option.name}
-                name={option.name}
-                selected={option.selected}
-                {...{ onValueChange, onMoveUp, onMoveDown }}
-                upDisabled={i === 0}
-                downDisabled={i === testOptions.length - 1}
-                style={{
-                  animation:
-                    lastMovedUp === option.name
-                      ? "slide-up 0.2s"
-                      : lastMovedDown === option.name
-                        ? "slide-down 0.2s"
-                        : "none",
-                }}
-                onAnimationEnd={() => {
-                  option.name === lastMovedDown && setLastMovedDown(null);
-                  option.name === lastMovedUp && setLastMovedUp(null);
-                }}
-              />
-            ))}
-          </CardContent>
-          <CardFooter className="flex justify-between">
-            <Label className="flex w-max cursor-pointer items-center gap-4">
-              <Checkbox
-                checked={allSelected}
-                onCheckedChange={onSelectAllChange}
-              />
-              <div>Select all</div>
-            </Label>
-            <Button
-              disabled={allSelected === false}
-              onClick={() => setPhase("test")}
-            >
-              Start the tests
-            </Button>
-          </CardFooter>
-        </Card>
-      </section>
-    );
-
-  if (phase === "test")
-    return (
-      <section className="space-y-4">
-        <Button
-          onClick={() => setPhase("select")}
-          size="icon"
-          variant="outline"
-        >
-          <ArrowLeft />
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Select the tests you want to take</CardTitle>
+      </CardHeader>
+      <CardContent>
+        {testOptions.map((option, i) => (
+          <TestSelectorOption
+            key={option.name}
+            name={option.name}
+            selected={option.selected}
+            {...{ onValueChange, onMoveUp, onMoveDown }}
+            upDisabled={i === 0}
+            downDisabled={i === testOptions.length - 1}
+            style={{
+              animation:
+                lastMovedUp === option.name
+                  ? "slide-up 0.2s"
+                  : lastMovedDown === option.name
+                    ? "slide-down 0.2s"
+                    : "none",
+            }}
+            onAnimationEnd={() => {
+              option.name === lastMovedDown && setLastMovedDown(null);
+              option.name === lastMovedUp && setLastMovedUp(null);
+            }}
+          />
+        ))}
+      </CardContent>
+      <CardFooter className="flex justify-between">
+        <Label className="flex w-max cursor-pointer items-center gap-4">
+          <Checkbox checked={allSelected} onCheckedChange={onSelectAllChange} />
+          <div>Select all</div>
+        </Label>
+        <Button disabled={allSelected === false} onClick={onStartTest}>
+          Start the tests
         </Button>
-        <TestPerformer
-          tests={testOptions
-            .filter((option) => option.selected)
-            .map((option) => option.name)}
-        />
-      </section>
-    );
+      </CardFooter>
+    </Card>
+  );
 };
 
 export default TestSelector;

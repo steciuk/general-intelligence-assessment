@@ -3,6 +3,7 @@ import { Progress } from "@components/ui/progress";
 import React from "react";
 
 const MAX_TIME = 2 * 60;
+// const MAX_TIME = 2;
 
 const Test = (props: {
   onCompleted: (numCorrect: number, numIncorrect: number) => void;
