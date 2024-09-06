@@ -5,11 +5,12 @@ export type TestProps = {
   onIncorrectAnswer: () => void;
 };
 
-export type TestResult = {
-  testName: TestName;
-  numCorrect: number;
-  numIncorrect: number;
-};
+export type TestResults = Partial<{
+  [key in TestName]: {
+    numCorrect: number;
+    numIncorrect: number;
+  };
+}>;
 
 export enum TestName {
   REASONING = "Reasoning",

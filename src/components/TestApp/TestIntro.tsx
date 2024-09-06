@@ -23,7 +23,7 @@ const TestIntro = (props: {
       </CardHeader>
       <CardContent>{children}</CardContent>
       <CardFooter className="flex justify-center">
-        <Button onClick={onStartTest}>Start the test</Button>
+        <Button onClick={onStartTest}>I'm ready</Button>
       </CardFooter>
     </Card>
   );

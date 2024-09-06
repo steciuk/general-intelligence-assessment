@@ -1,7 +1,7 @@
 import {
   TestName,
   type TestProps,
-  type TestResult,
+  type TestResults,
 } from "@components/TestApp/types";
 import React from "react";
 
@@ -22,20 +22,20 @@ const TEST_MAP = {
 
 const TestPerformer = (props: {
   tests: TestName[];
-  onCompleted: (testResults: TestResult[]) => void;
+  onCompleted: (testResults: TestResults) => void;
 }) => {
   const { tests, onCompleted } = props;
   const [currentTestIndex, setCurrentTestIndex] = React.useState(0);
-  const [testResults, setTestResults] = React.useState<TestResult[]>([]);
+  const [testResults, setTestResults] = React.useState<TestResults>({});
 
   const currentTestName = tests[currentTestIndex];
   const CurrentTest = TEST_MAP[currentTestName];
 
   const onTestCompleted = (numCorrect: number, numIncorrect: number) => {
-    const newResults = [
+    const newResults = {
       ...testResults,
-      { testName: currentTestName, numCorrect, numIncorrect },
-    ];
+      [currentTestName]: { numCorrect, numIncorrect },
+    };
 
     if (currentTestIndex === tests.length - 1) {
       onCompleted(newResults);

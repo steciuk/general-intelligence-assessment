@@ -1,4 +1,4 @@
-import type { TestResult } from "@components/TestApp/types";
+import type { TestName, TestResults } from "@components/TestApp/types";
 import {
   ChartContainer,
   ChartTooltip,
@@ -8,7 +8,7 @@ import {
 import React from "react";
 import { Area, AreaChart } from "recharts";
 
-export type ScoredResult = Pick<TestResult, "numCorrect" | "numIncorrect"> & {
+export type ScoredResult = TestResults[TestName] & {
   score: number;
 };
 

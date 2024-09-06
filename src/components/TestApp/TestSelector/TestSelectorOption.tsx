@@ -39,7 +39,7 @@ const TestSelectorOption = React.forwardRef<
   return (
     <Card {...restProps} ref={ref}>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3">
-        <Label className="flex cursor-pointer items-center gap-4 text-lg">
+        <Label className="flex cursor-pointer items-center gap-4 md:text-lg">
           <Checkbox checked={selected} onCheckedChange={onCheckedChange} />
           <div>{name}</div>
         </Label>

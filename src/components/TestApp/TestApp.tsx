@@ -3,10 +3,11 @@ import TestSelector, {
   type TestOption,
 } from "@components/TestApp/TestSelector/TestSelector";
 import TestsResults from "@components/TestApp/TestResults/TestsResults";
-import { TestName, type TestResult } from "@components/TestApp/types";
+import { TestName, type TestResults } from "@components/TestApp/types";
 import { Button } from "@components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import React, { StrictMode } from "react";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 const TestApp = () => {
   const [phase, setPhase] = React.useState<
@@ -14,8 +15,7 @@ const TestApp = () => {
     | { name: "test" }
     | {
         name: "results";
-        currentResults: TestResult[];
-        previousResults: TestResult[][];
+        currentResults: TestResults;
       }
   >({ name: "select" });
   const [testOptions, setTestOptions] = React.useState<TestOption[]>([
@@ -25,31 +25,24 @@ const TestApp = () => {
     { name: TestName.WORDS_MEANING, selected: true },
     { name: TestName.SPATIAL_VISUALIZATION, selected: true },
   ]);
+  const [previousResults, setPreviousResults] = useLocalStorage<TestResults[]>(
+    "testResults",
+    [],
+  );
 
-  const onCompleted = (testResults: TestResult[]) => {
-    const previousResultsWithTimestamps = getPreviousResults();
+  const onCompleted = (testResults: TestResults) => {
+    const newResults = [...previousResults, testResults];
 
-    const timeStamp = new Date().toISOString();
-    const newResults = {
-      timeStamp,
-      results: testResults,
-    };
-
-    localStorage.setItem(
-      "testResults",
-      JSON.stringify([...previousResultsWithTimestamps, newResults]),
-    );
-
-    const previousResults = previousResultsWithTimestamps.map(
-      ({ results }) => results,
-    );
-
-    setPhase({ name: "results", currentResults: testResults, previousResults });
+    setPreviousResults(newResults);
+    setPhase({
+      name: "results",
+      currentResults: testResults,
+    });
   };
 
   return (
     <StrictMode>
-      <section className="space-y-2">
+      <section className="space-y-6">
         {phase.name !== "select" && (
           <Button
             onClick={() => setPhase({ name: "select" })}
@@ -60,11 +53,25 @@ const TestApp = () => {
           </Button>
         )}
         {phase.name === "select" ? (
-          <TestSelector
-            testOptions={testOptions}
-            setTestOptions={setTestOptions}
-            onStartTest={() => setPhase({ name: "test" })}
-          />
+          <div className="space-y-6">
+            <TestSelector
+              testOptions={testOptions}
+              setTestOptions={setTestOptions}
+              onStartTest={() => setPhase({ name: "test" })}
+            />
+            <Button
+              onClick={() =>
+                setPhase({
+                  name: "results",
+                  currentResults: {},
+                })
+              }
+              variant="outline"
+              className="mx-auto flex"
+            >
+              See results history
+            </Button>
+          </div>
         ) : phase.name === "test" ? (
           <TestPerformer
             tests={testOptions
@@ -73,27 +80,11 @@ const TestApp = () => {
             onCompleted={onCompleted}
           />
         ) : phase.name === "results" ? (
-          <div className="space-y-6">
-            <TestsResults
-              currentResults={phase.currentResults}
-              previousResults={phase.previousResults}
-            />
-            <div className="flex justify-center gap-4">
-              {/* TODO: add some confirmation */}
-              <Button
-                variant="destructive"
-                onClick={() => {
-                  localStorage.removeItem("testResults");
-                  setPhase({ name: "select" });
-                }}
-              >
-                Clear results history
-              </Button>
-              <Button onClick={() => setPhase({ name: "test" })}>
-                Retake the tests
-              </Button>
-            </div>
-          </div>
+          <TestsResults
+            currentResults={phase.currentResults}
+            restartTests={() => setPhase({ name: "test" })}
+            goToTestSelection={() => setPhase({ name: "select" })}
+          />
         ) : null}
       </section>
     </StrictMode>
@@ -101,19 +92,3 @@ const TestApp = () => {
 };
 
 export default TestApp;
-
-type ResultsWithTimestamp = { timestamp: string; results: TestResult[] };
-
-function getPreviousResults(): ResultsWithTimestamp[] {
-  let previousResultsWithTimestamps: ResultsWithTimestamp[] | null = null;
-
-  try {
-    previousResultsWithTimestamps = JSON.parse(
-      localStorage.getItem("testResults") ?? "null",
-    );
-  } catch (error) {
-    console.error("Error parsing previous results", error);
-  }
-
-  return previousResultsWithTimestamps ?? [];
-}

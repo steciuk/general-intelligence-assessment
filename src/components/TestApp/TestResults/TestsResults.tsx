@@ -1,5 +1,5 @@
 import React from "react";
-import { TestName, type TestResult } from "@components/TestApp/types";
+import { TestName, type TestResults } from "@components/TestApp/types";
 import {
   Card,
   CardContent,
@@ -10,6 +10,8 @@ import {
 import ResultsChart, {
   type ScoredResult,
 } from "@components/TestApp/TestResults/ResultsChart";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { Button } from "@components/ui/button";
 
 function createScoringFunction(numPossibleAnswers: number) {
   return (numCorrect: number, numIncorrect: number) => {
@@ -50,26 +52,31 @@ const SCORING_FUNCTIONS = {
 //   );
 // };
 
-const MAX_TEST_HISTORY = 20;
+const MAX_TEST_HISTORY = 50;
+
+const TESTS = Object.values(TestName);
 
 const TestsResults = (props: {
-  currentResults: TestResult[];
-  previousResults: TestResult[][];
+  currentResults: TestResults;
+  restartTests: () => void;
+  goToTestSelection: () => void;
 }) => {
-  const { currentResults, previousResults } = props;
+  const { currentResults, restartTests, goToTestSelection } = props;
+  const [previousResults, setPreviousResults] = useLocalStorage<TestResults[]>(
+    "testResults",
+    [],
+  );
 
   const results = React.useMemo(() => {
     const lastMaxTests = previousResults.slice(-MAX_TEST_HISTORY);
-
     const resultsMap = new Map<TestName, ScoredResult[]>();
 
-    currentResults.forEach(({ testName, ...rest }) => {
+    TESTS.forEach((testName) => {
       const results: ScoredResult[] = [];
 
       for (const testResults of lastMaxTests) {
-        const testResult = testResults.find(
-          (result) => result.testName === testName,
-        );
+        const testResult = testResults[testName];
+
         if (testResult) {
           results.push({
             numCorrect: testResult.numCorrect,
@@ -82,12 +89,6 @@ const TestsResults = (props: {
         }
       }
 
-      results.push({
-        numCorrect: rest.numCorrect,
-        numIncorrect: rest.numIncorrect,
-        score: SCORING_FUNCTIONS[testName](rest.numCorrect, rest.numIncorrect),
-      });
-
       resultsMap.set(testName, results);
     });
 
@@ -95,40 +96,63 @@ const TestsResults = (props: {
   }, [currentResults, previousResults]);
 
   return (
-    <ol className="space-y-4">
-      {currentResults.map((result) => {
-        const testResults = results.get(result.testName);
+    <>
+      <ul className="space-y-4">
+        {TESTS.map((testName) => {
+          const currentResult = currentResults[testName];
+          const allResults = results.get(testName);
 
-        return (
-          <Card key={result.testName}>
-            <CardHeader>
-              <CardTitle>{result.testName}</CardTitle>
-            </CardHeader>
-            <CardContent className="flex items-center justify-between text-xl">
-              <div className="flex flex-wrap overflow-hidden rounded-sm text-center">
-                <div className="min-w-12 bg-chart-2 p-2 text-destructive-foreground">
-                  {result.numCorrect}
-                </div>
-                <div className="min-w-12 bg-destructive p-2 text-destructive-foreground">
-                  {result.numIncorrect}
-                </div>
-              </div>
-              <div className="font-bold">
-                {SCORING_FUNCTIONS[result.testName](
-                  result.numCorrect,
-                  result.numIncorrect,
-                )}
-              </div>
-            </CardContent>
-            {testResults && testResults.length > 1 && (
+          return (
+            <Card key={testName}>
+              <CardHeader>
+                <CardTitle>{testName}</CardTitle>
+              </CardHeader>
+              {currentResult && (
+                <CardContent className="flex items-center justify-between text-xl">
+                  <div className="flex flex-wrap overflow-hidden rounded-sm text-center">
+                    <div className="min-w-12 bg-chart-2 p-2 text-destructive-foreground">
+                      {currentResult.numCorrect}
+                    </div>
+                    <div className="min-w-12 bg-destructive p-2 text-destructive-foreground">
+                      {currentResult.numIncorrect}
+                    </div>
+                  </div>
+                  <div className="font-bold">
+                    {SCORING_FUNCTIONS[testName](
+                      currentResult.numCorrect,
+                      currentResult.numIncorrect,
+                    )}
+                  </div>
+                </CardContent>
+              )}
               <CardFooter>
-                <ResultsChart results={testResults} />
+                {allResults && allResults.length > 0 ? (
+                  <ResultsChart results={allResults} />
+                ) : (
+                  <p className="w-full text-center font-thin">No results yet</p>
+                )}
               </CardFooter>
-            )}
-          </Card>
-        );
-      })}
-    </ol>
+            </Card>
+          );
+        })}
+      </ul>
+      <div className="flex flex-col items-center justify-center gap-4 sm:flex-row-reverse">
+        {Object.keys(currentResults).length > 0 && (
+          <Button onClick={restartTests}>Retake the tests</Button>
+        )}
+        {/* TODO: add some confirmation */}
+        <Button
+          variant="destructive"
+          onClick={() => {
+            setPreviousResults([]);
+            goToTestSelection();
+          }}
+          disabled={previousResults.length === 0}
+        >
+          Clear results history
+        </Button>
+      </div>
+    </>
   );
 };
 
