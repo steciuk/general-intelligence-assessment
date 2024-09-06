@@ -2,10 +2,9 @@ import type { TestProps } from "@components/TestApp/types";
 import { Progress } from "@components/ui/progress";
 import React from "react";
 import "@components/TestApp/TestContainer/TestContainer.css";
-import { Currency } from "lucide-react";
 
-// const MAX_TIME = 2 * 60;
-const MAX_TIME = 2;
+const MAX_TIME = 2 * 60;
+// const MAX_TIME = 2;
 
 const Test = (props: {
   onCompleted: (numCorrect: number, numIncorrect: number) => void;

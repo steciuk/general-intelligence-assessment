@@ -1,6 +1,12 @@
 import React from "react";
 import { TestName, type TestResult } from "@components/TestApp/types";
-import { Card, CardContent, CardHeader, CardTitle } from "@components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@components/ui/card";
 
 function createScoringFunction(numPossibleAnswers: number) {
   return (numCorrect: number, numIncorrect: number) => {
@@ -41,10 +47,60 @@ const SCORING_FUNCTIONS = {
 //   );
 // };
 
-const TestsResults = (props: { results: TestResult[] }) => {
+const MAX_TEST_HISTORY = 20;
+
+const TestsResults = (props: {
+  currentResults: TestResult[];
+  previousResults: TestResult[][];
+}) => {
+  const { currentResults, previousResults } = props;
+
+  const results = React.useMemo(() => {
+    const lastMaxTests = previousResults.slice(-MAX_TEST_HISTORY);
+
+    const resultsMap = new Map<
+      TestName,
+      { numCorrect: number; numIncorrect: number; score: number }[]
+    >();
+
+    currentResults.forEach(({ testName, ...rest }) => {
+      const results: {
+        numCorrect: number;
+        numIncorrect: number;
+        score: number;
+      }[] = [];
+
+      for (const testResults of lastMaxTests) {
+        const testResult = testResults.find(
+          (result) => result.testName === testName,
+        );
+        if (testResult) {
+          results.push({
+            numCorrect: testResult.numCorrect,
+            numIncorrect: testResult.numIncorrect,
+            score: SCORING_FUNCTIONS[testName](
+              testResult.numCorrect,
+              testResult.numIncorrect,
+            ),
+          });
+        }
+      }
+
+      results.push({
+        numCorrect: rest.numCorrect,
+        numIncorrect: rest.numIncorrect,
+        score: SCORING_FUNCTIONS[testName](rest.numCorrect, rest.numIncorrect),
+      });
+
+      resultsMap.set(testName, results);
+    });
+
+    return resultsMap;
+  }, [currentResults, previousResults]);
+
   return (
     <ol className="space-y-4">
-      {props.results.map((result) => (
+      {currentResults.map((result) => (
         <Card key={result.testName}>
           <CardHeader>
             <CardTitle>{result.testName}</CardTitle>
@@ -65,6 +121,13 @@ const TestsResults = (props: { results: TestResult[] }) => {
               )}
             </div>
           </CardContent>
+          <CardFooter>
+            <div className="flex flex-wrap gap-4">
+              {results
+                .get(result.testName)
+                ?.map(({ score }, i) => <div key={i}>{score}</div>)}
+            </div>
+          </CardFooter>
         </Card>
       ))}
     </ol>

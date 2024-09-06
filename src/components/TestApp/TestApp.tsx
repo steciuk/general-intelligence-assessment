@@ -12,7 +12,11 @@ const TestApp = () => {
   const [phase, setPhase] = React.useState<
     | { name: "select" }
     | { name: "test" }
-    | { name: "results"; data: TestResult[] }
+    | {
+        name: "results";
+        currentResults: TestResult[];
+        previousResults: TestResult[][];
+      }
   >({ name: "select" });
   const [testOptions, setTestOptions] = React.useState<TestOption[]>([
     { name: TestName.REASONING, selected: true },
@@ -23,7 +27,37 @@ const TestApp = () => {
   ]);
 
   const onCompleted = (testResults: TestResult[]) => {
-    setPhase({ name: "results", data: testResults });
+    let previousResultsWithTimestamps:
+      | { timestamp: string; results: TestResult[] }[]
+      | null = null;
+
+    try {
+      previousResultsWithTimestamps = JSON.parse(
+        localStorage.getItem("testResults") ?? "null",
+      );
+    } catch (error) {
+      console.error("Error parsing previous results", error);
+    }
+
+    const timeStamp = new Date().toISOString();
+    const newResults = {
+      timeStamp,
+      results: testResults,
+    };
+
+    localStorage.setItem(
+      "testResults",
+      JSON.stringify(
+        previousResultsWithTimestamps
+          ? [...previousResultsWithTimestamps, newResults]
+          : [newResults],
+      ),
+    );
+
+    const previousResults =
+      previousResultsWithTimestamps?.map(({ results }) => results) ?? [];
+
+    setPhase({ name: "results", currentResults: testResults, previousResults });
   };
 
   return (
@@ -53,7 +87,10 @@ const TestApp = () => {
           />
         ) : phase.name === "results" ? (
           <div className="space-y-6">
-            <TestsResults results={phase.data} />
+            <TestsResults
+              currentResults={phase.currentResults}
+              previousResults={phase.previousResults}
+            />
             <Button
               className="m-auto flex"
               onClick={() => setPhase({ name: "test" })}
