@@ -78,12 +78,21 @@ const TestApp = () => {
               currentResults={phase.currentResults}
               previousResults={phase.previousResults}
             />
-            <Button
-              className="m-auto flex"
-              onClick={() => setPhase({ name: "test" })}
-            >
-              Retake the tests
-            </Button>
+            <div className="flex justify-center gap-4">
+              {/* TODO: add some confirmation */}
+              <Button
+                variant="destructive"
+                onClick={() => {
+                  localStorage.removeItem("testResults");
+                  setPhase({ name: "select" });
+                }}
+              >
+                Clear results history
+              </Button>
+              <Button onClick={() => setPhase({ name: "test" })}>
+                Retake the tests
+              </Button>
+            </div>
           </div>
         ) : null}
       </section>

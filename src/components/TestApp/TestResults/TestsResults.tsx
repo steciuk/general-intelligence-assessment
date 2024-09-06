@@ -120,9 +120,11 @@ const TestsResults = (props: {
                 )}
               </div>
             </CardContent>
-            <CardFooter>
-              {testResults && <ResultsChart results={testResults} />}
-            </CardFooter>
+            {testResults && testResults.length > 1 && (
+              <CardFooter>
+                <ResultsChart results={testResults} />
+              </CardFooter>
+            )}
           </Card>
         );
       })}
