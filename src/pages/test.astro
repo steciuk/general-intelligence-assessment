@@ -1,8 +1,9 @@
 ---
+import { getLocale } from "@/i18n";
 import TestApp from "@components/TestApp/TestApp";
 import Layout from "@layouts/Layout.astro";
 ---
 
 <Layout subtitle="Test">
-  <TestApp client:load />
+  <TestApp client:load locale={getLocale(Astro.url)} />
 </Layout>

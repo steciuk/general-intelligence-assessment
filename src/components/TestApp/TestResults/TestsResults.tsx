@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { TestName, type TestResults } from "@components/TestApp/types";
 import {
   Card,
@@ -12,6 +12,8 @@ import ResultsChart, {
 } from "@components/TestApp/TestResults/ResultsChart";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { Button } from "@components/ui/button";
+import { LocaleContext } from "@/contexts/LocaleContext";
+import { i18n } from "@/i18n";
 
 function createScoringFunction(numPossibleAnswers: number) {
   return (numCorrect: number, numIncorrect: number) => {
@@ -62,6 +64,8 @@ const TestsResults = (props: {
   goToTestSelection: () => void;
 }) => {
   const { currentResults, restartTests, goToTestSelection } = props;
+  const locale = useContext(LocaleContext);
+  const t = i18n(locale);
   const [previousResults, setPreviousResults] = useLocalStorage<TestResults[]>(
     "testResults",
     [],
@@ -105,7 +109,7 @@ const TestsResults = (props: {
           return (
             <Card key={testName}>
               <CardHeader>
-                <CardTitle>{testName}</CardTitle>
+                <CardTitle>{t("test-names", testName)}</CardTitle>
               </CardHeader>
               {currentResult && (
                 <CardContent className="flex items-center justify-between text-xl">
@@ -129,7 +133,9 @@ const TestsResults = (props: {
                 {allResults && allResults.length > 0 ? (
                   <ResultsChart results={allResults} />
                 ) : (
-                  <p className="w-full text-center font-thin">No results yet</p>
+                  <p className="w-full text-center font-thin">
+                    {t("results-history", "no-results")}
+                  </p>
                 )}
               </CardFooter>
             </Card>
@@ -138,7 +144,9 @@ const TestsResults = (props: {
       </ul>
       <div className="flex flex-col items-center justify-center gap-4 sm:flex-row-reverse">
         {Object.keys(currentResults).length > 0 && (
-          <Button onClick={restartTests}>Retake the tests</Button>
+          <Button onClick={restartTests}>
+            {t("results-history", "retake")}
+          </Button>
         )}
         {/* TODO: add some confirmation */}
         <Button
@@ -149,7 +157,7 @@ const TestsResults = (props: {
           }}
           disabled={previousResults.length === 0}
         >
-          Clear results history
+          {t("results-history", "clear-history")}
         </Button>
       </div>
     </>

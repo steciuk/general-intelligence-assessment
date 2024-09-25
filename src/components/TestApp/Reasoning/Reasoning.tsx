@@ -1,12 +1,16 @@
 import { chooseRandom, pickRandom, randomBool } from "@/random";
 import { Card, CardFooter, CardHeader, CardTitle } from "@components/ui/card";
 import { comparisons, names } from "@components/TestApp/Reasoning/data";
-import React from "react";
+import React, { useContext } from "react";
 import { TestName, type TestProps } from "@components/TestApp/types";
 import TestIntro from "@components/TestApp/TestIntro";
 import TestButton from "@components/TestApp/TestButton";
+import { LocaleContext } from "@/contexts/LocaleContext";
+import { i18n } from "@/i18n";
 
 const Reasoning = (props: TestProps) => {
+  const locale = useContext(LocaleContext);
+  const t = i18n(locale, "reasoning");
   const { onCorrectAnswer, onIncorrectAnswer, testState } = props;
   const [question, setQuestion] = React.useState(generateQuestion);
   const [isStatementPhase, setIsStatementPhase] = React.useState(true);
@@ -25,11 +29,7 @@ const Reasoning = (props: TestProps) => {
   if (testState === "intro")
     return (
       <TestIntro testName={TestName.REASONING} onStartTest={props.onStartTest}>
-        <p className="text-justify">
-          In this test, you will be presented with a statement and a question.
-          The statement will compare two names, and the question will ask you to
-          identify which name fits the comparison.
-        </p>
+        <p className="text-justify">{t("intro")}</p>
       </TestIntro>
     );
 
@@ -43,7 +43,7 @@ const Reasoning = (props: TestProps) => {
       <CardFooter className="flex justify-center">
         {isStatementPhase ? (
           <TestButton onClick={() => setIsStatementPhase(false)}>
-            Show the question
+            {t("cta")}
           </TestButton>
         ) : (
           <div className="flex flex-wrap justify-center gap-4">

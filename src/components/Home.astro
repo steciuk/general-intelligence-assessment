@@ -6,8 +6,8 @@ import Link from "@components/Link.astro";
 import { getLocale, i18n } from "@/i18n";
 import { getRelativeLocaleUrl } from "astro:i18n";
 
-const t = i18n(Astro.url, "home");
 const locale = getLocale(Astro.url);
+const t = i18n(locale, "home");
 ---
 
 <Card>

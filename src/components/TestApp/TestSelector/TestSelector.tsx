@@ -10,9 +10,11 @@ import { Checkbox } from "@components/ui/checkbox";
 import { Label } from "@components/ui/label";
 import type { CheckedState } from "@radix-ui/react-checkbox";
 import "@components/TestApp/TestSelector/TestSelector.css";
-import React from "react";
+import React, { useContext } from "react";
 import { TestName } from "@components/TestApp/types";
 import TestSelectorOption from "@components/TestApp/TestSelector/TestSelectorOption";
+import { LocaleContext } from "@/contexts/LocaleContext";
+import { i18n } from "@/i18n";
 
 export type TestOption = {
   name: TestName;
@@ -24,6 +26,9 @@ const TestSelector = (props: {
   setTestOptions: (options: TestOption[]) => void;
   onStartTest: () => void;
 }) => {
+  const locale = useContext(LocaleContext);
+  const t = i18n(locale, "test-selector");
+
   const { testOptions, setTestOptions, onStartTest } = props;
 
   const [lastMovedUp, setLastMovedUp] = React.useState<string | null>(null);
@@ -86,7 +91,7 @@ const TestSelector = (props: {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Select the tests you want to take</CardTitle>
+        <CardTitle>{t("title")}</CardTitle>
       </CardHeader>
       <CardContent>
         {testOptions.map((option, i) => (
@@ -115,10 +120,10 @@ const TestSelector = (props: {
       <CardFooter className="flex justify-between">
         <Label className="flex w-max cursor-pointer items-center gap-4">
           <Checkbox checked={allSelected} onCheckedChange={onSelectAllChange} />
-          <div>Select all</div>
+          <div>{t("select-all")}</div>
         </Label>
         <Button disabled={allSelected === false} onClick={onStartTest}>
-          Start the tests
+          {t("start")}
         </Button>
       </CardFooter>
     </Card>
