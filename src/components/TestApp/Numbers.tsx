@@ -1,6 +1,7 @@
 import { LocaleContext } from "@/contexts/LocaleContext";
 import { i18n } from "@/i18n";
 import { chooseRandom, randomBool, randomInt } from "@/random";
+import { logOnIncorrect } from "@components/TestApp/logOnIncorrect";
 import TestButton from "@components/TestApp/TestButton";
 import TestIntro from "@components/TestApp/TestIntro";
 import { TestName, type TestProps } from "@components/TestApp/types";
@@ -17,6 +18,7 @@ const Numbers = (props: TestProps) => {
     if (answer === question.answer) {
       onCorrectAnswer();
     } else {
+      logOnIncorrect(question, answer);
       onIncorrectAnswer();
     }
 

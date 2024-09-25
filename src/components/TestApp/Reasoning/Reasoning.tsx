@@ -8,6 +8,7 @@ import { LocaleContext } from "@/contexts/LocaleContext";
 import { i18n, type Locale } from "@/i18n";
 import dataEn from "./data-en";
 import dataPl from "./data-pl";
+import { logOnIncorrect } from "@components/TestApp/logOnIncorrect";
 
 const Reasoning = (props: TestProps) => {
   const locale = useContext(LocaleContext);
@@ -22,6 +23,7 @@ const Reasoning = (props: TestProps) => {
     if (answer === question.answer) {
       onCorrectAnswer();
     } else {
+      logOnIncorrect(question, answer);
       onIncorrectAnswer();
     }
 

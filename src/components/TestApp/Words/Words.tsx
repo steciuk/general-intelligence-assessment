@@ -8,6 +8,7 @@ import { categories as categoriesPl } from "./data-pl";
 import React, { useContext } from "react";
 import { LocaleContext } from "@/contexts/LocaleContext";
 import { i18n, type Locale } from "@/i18n";
+import { logOnIncorrect } from "@components/TestApp/logOnIncorrect";
 
 const Words = (props: TestProps) => {
   const { onCorrectAnswer, onIncorrectAnswer, testState } = props;
@@ -21,6 +22,7 @@ const Words = (props: TestProps) => {
     if (answer === question.answer) {
       onCorrectAnswer();
     } else {
+      logOnIncorrect(question, answer);
       onIncorrectAnswer();
     }
 
