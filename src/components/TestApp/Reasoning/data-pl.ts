@@ -254,23 +254,6 @@ const comparisons = [
       ["bardziej nieczuły(-a)", "mniej empatyczny(-a)"],
     ],
   },
-
-  {
-    s: [
-      [
-        "jest bardziej kreatywny(-a) niż",
-        "nie jest tak mało pomysłowy(-a) jak",
-      ],
-      [
-        "jest bardziej mało pomysłowy(-a) niż",
-        "nie jest tak kreatywny(-a) jak",
-      ],
-    ],
-    q: [
-      ["bardziej kreatywny(-a)", "mniej mało pomysłowy(-a)"],
-      ["bardziej mało pomysłowy(-a)", "mniej kreatywny(-a)"],
-    ],
-  },
   {
     s: [
       [
@@ -431,12 +414,12 @@ const comparisons = [
   },
   {
     s: [
-      ["jest bardziej wyrozumiały(-a) niż", "nie jest tak osądowy(-a) jak"],
-      ["jest bardziej osądowy(-a) niż", "nie jest tak wyrozumiały(-a) jak"],
+      ["jest bardziej wyrozumiały(-a) niż", "nie jest tak osądzający(-a) jak"],
+      ["jest bardziej osądzający(-a) niż", "nie jest tak wyrozumiały(-a) jak"],
     ],
     q: [
-      ["bardziej wyrozumiały(-a)", "mniej osądowy(-a)"],
-      ["bardziej osądowy(-a)", "mniej wyrozumiały(-a)"],
+      ["bardziej wyrozumiały(-a)", "mniej osądzający(-a)"],
+      ["bardziej osądzający(-a)", "mniej wyrozumiały(-a)"],
     ],
   },
   {
@@ -487,16 +470,6 @@ const comparisons = [
   },
   {
     s: [
-      ["jest bardziej niezawodny(-a) niż", "nie jest tak niespójny(-a) jak"],
-      ["jest bardziej niespójny(-a) niż", "nie jest tak niezawodny(-a) jak"],
-    ],
-    q: [
-      ["bardziej niezawodny(-a)", "mniej niespójny(-a)"],
-      ["bardziej niespójny(-a)", "mniej niezawodny(-a)"],
-    ],
-  },
-  {
-    s: [
       ["jest bardziej refleksyjny(-a) niż", "nie jest tak bezmyślny(-a) jak"],
       ["jest bardziej bezmyślny(-a) niż", "nie jest tak refleksyjny(-a) jak"],
     ],
@@ -528,12 +501,18 @@ const comparisons = [
   },
   {
     s: [
-      ["jest bardziej zdeterminowany(-a) niż", "nie jest tak wahał(-a) jak"],
-      ["jest bardziej wahał(-a) niż", "nie jest tak zdeterminowany(-a) jak"],
+      [
+        "jest bardziej zdeterminowany(-a) niż",
+        "nie jest tak niezdeterminowany(-a) jak",
+      ],
+      [
+        "jest bardziej niezdeterminowany(-a) niż",
+        "nie jest tak zdeterminowany(-a) jak",
+      ],
     ],
     q: [
-      ["bardziej zdeterminowany(-a)", "mniej wahał(-a)"],
-      ["bardziej wahał(-a)", "mniej zdeterminowany(-a)"],
+      ["bardziej zdeterminowany(-a)", "mniej niezdeterminowany(-a)"],
+      ["bardziej niezdeterminowany(-a)", "mniej zdeterminowany(-a)"],
     ],
   },
   {
@@ -642,12 +621,12 @@ const comparisons = [
   },
   {
     s: [
-      ["jest bardziej ambitny(-a) niż", "nie jest tak zadowolony(-a) jak"],
-      ["jest bardziej zadowolony(-a) niż", "nie jest tak ambitny(-a) jak"],
+      ["jest bardziej ambitny(-a) niż", "nie jest tak nieambitny(-a) jak"],
+      ["jest bardziej nieambitny(-a) niż", "nie jest tak ambitny(-a) jak"],
     ],
     q: [
-      ["bardziej ambitny(-a)", "mniej zadowolony(-a)"],
-      ["bardziej zadowolony(-a)", "mniej ambitny(-a)"],
+      ["bardziej ambitny(-a)", "mniej nieambitny(-a)"],
+      ["bardziej nieambitny(-a)", "mniej ambitny(-a)"],
     ],
   },
   {
