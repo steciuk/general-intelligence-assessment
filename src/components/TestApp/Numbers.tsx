@@ -1,18 +1,24 @@
+import { LocaleContext } from "@/contexts/LocaleContext";
+import { i18n } from "@/i18n";
 import { chooseRandom, randomBool, randomInt } from "@/random";
+import { logOnIncorrect } from "@components/TestApp/logOnIncorrect";
 import TestButton from "@components/TestApp/TestButton";
 import TestIntro from "@components/TestApp/TestIntro";
 import { TestName, type TestProps } from "@components/TestApp/types";
 import { Card, CardHeader, CardTitle, CardFooter } from "@components/ui/card";
-import React from "react";
+import React, { useContext } from "react";
 
 const Numbers = (props: TestProps) => {
   const { onCorrectAnswer, onIncorrectAnswer, testState } = props;
+  const locale = useContext(LocaleContext);
+  const t = i18n(locale, "numbers");
   const [question, setQuestion] = React.useState(generateQuestion);
 
   const onAnswer = (answer: number) => {
     if (answer === question.answer) {
       onCorrectAnswer();
     } else {
+      logOnIncorrect(question, answer);
       onIncorrectAnswer();
     }
 
@@ -25,17 +31,14 @@ const Numbers = (props: TestProps) => {
         testName={TestName.NUMBERS_SPEED_AND_ACCURACY}
         onStartTest={props.onStartTest}
       >
-        <p className="text-justify">
-          In this test, you will be presented with three numbers. Your task is
-          to identify which number is furthest from the median.
-        </p>
+        <p className="text-justify">{t("intro")}</p>
       </TestIntro>
     );
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Which number is furthest from the median?</CardTitle>
+        <CardTitle>{t("question")}</CardTitle>
       </CardHeader>
       <CardFooter className="flex flex-wrap justify-center gap-4">
         {question.numbers.map((number) => (

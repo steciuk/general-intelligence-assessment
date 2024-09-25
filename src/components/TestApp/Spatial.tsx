@@ -1,4 +1,7 @@
+import { LocaleContext } from "@/contexts/LocaleContext";
+import { i18n } from "@/i18n";
 import { chooseRandom, pickRandom, randomBool, randomInt } from "@/random";
+import { logOnIncorrect } from "@components/TestApp/logOnIncorrect";
 import TestButton from "@components/TestApp/TestButton";
 import TestIntro from "@components/TestApp/TestIntro";
 import { TestName, type TestProps } from "@components/TestApp/types";
@@ -10,16 +13,19 @@ import {
   CardFooter,
   CardDescription,
 } from "@components/ui/card";
-import React from "react";
+import React, { useContext } from "react";
 
 const Spatial = (props: TestProps) => {
   const { onCorrectAnswer, onIncorrectAnswer, testState } = props;
+  const locale = useContext(LocaleContext);
+  const t = i18n(locale, "spatial-visualization");
   const [question, setQuestion] = React.useState(generateQuestion);
 
   const onAnswer = (answer: number) => {
     if (answer === question.answer) {
       onCorrectAnswer();
     } else {
+      logOnIncorrect(question, answer);
       onIncorrectAnswer();
     }
 
@@ -32,22 +38,15 @@ const Spatial = (props: TestProps) => {
         testName={TestName.SPATIAL_VISUALIZATION}
         onStartTest={props.onStartTest}
       >
-        <p className="text-justify">
-          In this test, you will be presented with two columns of letters. Your
-          task is to identify how many boxes have the same letter. Rotated
-          letters are considered the same, while mirrored letters are not.
-        </p>
+        <p className="text-justify">{t("intro")}</p>
       </TestIntro>
     );
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>How many boxes have the same letter?</CardTitle>
-        <CardDescription>
-          Rotated letters are considered the same, while mirrored letters are
-          not.
-        </CardDescription>
+        <CardTitle>{t("question")}</CardTitle>
+        <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
       <CardContent className="flex justify-center gap-6 text-2xl">
         {question.columns.map((letters, i) => (

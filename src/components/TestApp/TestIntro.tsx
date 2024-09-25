@@ -1,3 +1,5 @@
+import { LocaleContext } from "@/contexts/LocaleContext";
+import { i18n } from "@/i18n";
 import type { TestName } from "@components/TestApp/types";
 import { Button } from "@components/ui/button";
 import {
@@ -7,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@components/ui/card";
-import React from "react";
+import React, { useContext } from "react";
 
 const TestIntro = (props: {
   testName: TestName;
@@ -15,15 +17,17 @@ const TestIntro = (props: {
   onStartTest: () => void;
 }) => {
   const { testName, children, onStartTest } = props;
+  const locale = useContext(LocaleContext);
+  const t = i18n(locale);
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{testName}</CardTitle>
+        <CardTitle>{t("test-names", testName)}</CardTitle>
       </CardHeader>
       <CardContent>{children}</CardContent>
       <CardFooter className="flex justify-center">
-        <Button onClick={onStartTest}>I'm ready</Button>
+        <Button onClick={onStartTest}>{t("test-intro", "cta")}</Button>
       </CardFooter>
     </Card>
   );

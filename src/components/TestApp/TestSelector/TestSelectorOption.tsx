@@ -1,3 +1,5 @@
+import { LocaleContext } from "@/contexts/LocaleContext";
+import { i18n } from "@/i18n";
 import type { TestName } from "@components/TestApp/types";
 import { Button } from "@components/ui/button";
 import { Card, CardHeader, type CardProps } from "@components/ui/card";
@@ -5,7 +7,7 @@ import { Checkbox } from "@components/ui/checkbox";
 import { Label } from "@components/ui/label";
 import { type CheckedState } from "@radix-ui/react-checkbox";
 import { ArrowDown, ArrowUp } from "lucide-react";
-import React from "react";
+import React, { useContext } from "react";
 
 const TestSelectorOption = React.forwardRef<
   HTMLDivElement,
@@ -30,6 +32,9 @@ const TestSelectorOption = React.forwardRef<
     ...restProps
   } = props;
 
+  const locale = useContext(LocaleContext);
+  const t = i18n(locale);
+
   const onCheckedChange = (checked: CheckedState) => {
     if (typeof checked === "boolean") {
       onValueChange(name, checked);
@@ -41,7 +46,7 @@ const TestSelectorOption = React.forwardRef<
       <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3">
         <Label className="flex cursor-pointer items-center gap-4 md:text-lg">
           <Checkbox checked={selected} onCheckedChange={onCheckedChange} />
-          <div>{name}</div>
+          <div>{t("test-names", name)}</div>
         </Label>
         <div className="flex gap-2">
           <Button

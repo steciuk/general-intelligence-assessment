@@ -1,3 +1,5 @@
+import { LocaleContext } from "@/contexts/LocaleContext";
+import { i18n } from "@/i18n";
 import type { TestName, TestResults } from "@components/TestApp/types";
 import {
   ChartContainer,
@@ -5,27 +7,29 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@components/ui/chart";
-import React from "react";
+import React, { useContext } from "react";
 import { Area, AreaChart } from "recharts";
 
 export type ScoredResult = TestResults[TestName] & {
   score: number;
 };
 
-const chartConfig = {
-  numCorrect: {
-    label: "Correct",
-  },
-  numIncorrect: {
-    label: "Incorrect",
-  },
-  score: {
-    label: "Score",
-  },
-} satisfies ChartConfig;
-
 const ResultsChart = (props: { results: ScoredResult[] }) => {
   const { results } = props;
+  const locale = useContext(LocaleContext);
+  const t = i18n(locale, "charts");
+
+  const chartConfig = {
+    numCorrect: {
+      label: t("correct"),
+    },
+    numIncorrect: {
+      label: t("incorrect"),
+    },
+    score: {
+      label: t("score"),
+    },
+  };
 
   return (
     <ChartContainer config={chartConfig} className="h-32 w-full">

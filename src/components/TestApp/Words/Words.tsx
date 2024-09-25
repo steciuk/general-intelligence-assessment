@@ -3,21 +3,30 @@ import TestButton from "@components/TestApp/TestButton";
 import TestIntro from "@components/TestApp/TestIntro";
 import { TestName, type TestProps } from "@components/TestApp/types";
 import { Card, CardHeader, CardTitle, CardFooter } from "@components/ui/card";
-import { categories } from "@components/TestApp/Words/data";
-import React from "react";
+import { categories as categoriesEn } from "./data-en";
+import { categories as categoriesPl } from "./data-pl";
+import React, { useContext } from "react";
+import { LocaleContext } from "@/contexts/LocaleContext";
+import { i18n, type Locale } from "@/i18n";
+import { logOnIncorrect } from "@components/TestApp/logOnIncorrect";
 
 const Words = (props: TestProps) => {
   const { onCorrectAnswer, onIncorrectAnswer, testState } = props;
-  const [question, setQuestion] = React.useState(generateQuestion);
+  const locale = useContext(LocaleContext);
+  const t = i18n(locale, "words-meaning");
+  const [question, setQuestion] = React.useState(() =>
+    generateQuestion(locale),
+  );
 
   const onAnswer = (answer: string) => {
     if (answer === question.answer) {
       onCorrectAnswer();
     } else {
+      logOnIncorrect(question, answer);
       onIncorrectAnswer();
     }
 
-    setQuestion(generateQuestion());
+    setQuestion(generateQuestion(locale));
   };
 
   if (testState === "intro")
@@ -26,17 +35,14 @@ const Words = (props: TestProps) => {
         testName={TestName.WORDS_MEANING}
         onStartTest={props.onStartTest}
       >
-        <p>
-          In this test, you will be presented with three words. Your task is to
-          identify which word doesn't belong.
-        </p>
+        <p className="text-justify">{t("intro")}</p>
       </TestIntro>
     );
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Which word doesn't belong?</CardTitle>
+        <CardTitle>{t("question")}</CardTitle>
       </CardHeader>
       <CardFooter className="flex flex-wrap justify-center gap-4">
         {question.words.map((word) => (
@@ -51,7 +57,9 @@ const Words = (props: TestProps) => {
 
 export default Words;
 
-function generateQuestion() {
+function generateQuestion(locale: Locale) {
+  const categories = locale === "pl" ? categoriesPl : categoriesEn;
+
   const [matching, odd] = chooseRandom(categories, 2, true);
   const matchingWords = chooseRandom(matching, 2, true);
   const oddWord = pickRandom(odd);

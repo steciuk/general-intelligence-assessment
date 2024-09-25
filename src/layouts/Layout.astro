@@ -1,7 +1,14 @@
 ---
-import Footer from "@components/Footer.astro";
+import {
+  delocalizePath,
+  getLocale,
+  LOCALES,
+  SWITCH_LOCALE_LABELS,
+} from "@/i18n";
+import Link from "@components/Link.astro";
 import "@styles/global.css";
 import { SEO } from "astro-seo";
+import { getRelativeLocaleUrl } from "astro:i18n";
 
 interface Props {
   subtitle?: string;
@@ -14,10 +21,13 @@ const title =
   subtitle && subtitle.trim() !== "General Intelligence Assessment"
     ? `${subtitle} | General Intelligence Assessment`
     : "General Intelligence Assessment";
+
+const locale = getLocale(Astro.url);
+const delocalizedPath = delocalizePath(Astro.url);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={locale}>
   <SEO title={title} description={description} charset="UTF-8" />
   {
     /* openGraph={{
@@ -37,11 +47,27 @@ const title =
   <meta name="generator" content={Astro.generator} />
   <meta name="author" content="Adam Steciuk" />
   <body
-    class="flex min-h-screen flex-col bg-background font-sans text-foreground"
+    class="relative flex min-h-screen flex-col bg-background font-sans text-foreground"
   >
+    <header class="absolute right-0 top-0 w-max p-2">
+      <ul>
+        {
+          LOCALES.filter((l) => l !== locale).map((l) => (
+            <li>
+              <Link href={getRelativeLocaleUrl(l, delocalizedPath)}>
+                {SWITCH_LOCALE_LABELS[l]}
+              </Link>
+            </li>
+          ))
+        }
+      </ul>
+    </header>
     <main class="container mx-auto max-w-xl flex-grow py-6">
       <slot />
     </main>
-    <Footer />
+    <footer class="mt-8 p-2 text-center">
+      <span id="footer-year">Made by </span>
+      <Link href="https://steciuk.dev" targetBlank> Adam Steciuk </Link>
+    </footer>
   </body>
 </html>
