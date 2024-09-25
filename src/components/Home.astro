@@ -1,0 +1,41 @@
+---
+import { Button } from "@components/ui/button";
+import { Card, CardHeader, CardContent, CardFooter } from "@components/ui/card";
+import { Separator } from "@radix-ui/react-separator";
+import Link from "@components/Link.astro";
+import { getLocale, i18n } from "@/i18n";
+import { getRelativeLocaleUrl } from "astro:i18n";
+
+const t = i18n(Astro.url, "home");
+const locale = getLocale(Astro.url);
+---
+
+<Card>
+  <CardHeader>
+    <h1 class="text-center text-2xl font-bold">
+      {t("title")}
+    </h1>
+  </CardHeader>
+  <CardContent>
+    <p class="text-justify">
+      {t("intro-1")}<Link
+        href="https://www.thomas.co/assessments/general-intelligence-assessment-gia"
+        targetBlank
+        noreferrer>{t("intro-2")}</Link
+      >{t("intro-3")}
+    </p>
+    <Separator className="my-4" />
+    <p class="text-justify text-sm">
+      {t("disclaimer-1")}
+    </p>
+    <Separator className="my-4 text-justify" />
+    <p class="text-sm text-destructive">
+      {t("disclaimer-2")}
+    </p>
+  </CardContent>
+  <CardFooter className="flex justify-center">
+    <Button>
+      <a href={getRelativeLocaleUrl(locale, "test")}>{t("cta")}</a>
+    </Button>
+  </CardFooter>
+</Card>
