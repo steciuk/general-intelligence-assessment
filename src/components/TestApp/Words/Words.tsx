@@ -3,16 +3,19 @@ import TestButton from "@components/TestApp/TestButton";
 import TestIntro from "@components/TestApp/TestIntro";
 import { TestName, type TestProps } from "@components/TestApp/types";
 import { Card, CardHeader, CardTitle, CardFooter } from "@components/ui/card";
-import { categories } from "@components/TestApp/Words/data";
+import { categories as categoriesEn } from "./data-en";
+import { categories as categoriesPl } from "./data-pl";
 import React, { useContext } from "react";
 import { LocaleContext } from "@/contexts/LocaleContext";
-import { i18n } from "@/i18n";
+import { i18n, type Locale } from "@/i18n";
 
 const Words = (props: TestProps) => {
   const { onCorrectAnswer, onIncorrectAnswer, testState } = props;
   const locale = useContext(LocaleContext);
   const t = i18n(locale, "words-meaning");
-  const [question, setQuestion] = React.useState(generateQuestion);
+  const [question, setQuestion] = React.useState(() =>
+    generateQuestion(locale),
+  );
 
   const onAnswer = (answer: string) => {
     if (answer === question.answer) {
@@ -21,7 +24,7 @@ const Words = (props: TestProps) => {
       onIncorrectAnswer();
     }
 
-    setQuestion(generateQuestion());
+    setQuestion(generateQuestion(locale));
   };
 
   if (testState === "intro")
@@ -52,7 +55,9 @@ const Words = (props: TestProps) => {
 
 export default Words;
 
-function generateQuestion() {
+function generateQuestion(locale: Locale) {
+  const categories = locale === "pl" ? categoriesPl : categoriesEn;
+
   const [matching, odd] = chooseRandom(categories, 2, true);
   const matchingWords = chooseRandom(matching, 2, true);
   const oddWord = pickRandom(odd);
