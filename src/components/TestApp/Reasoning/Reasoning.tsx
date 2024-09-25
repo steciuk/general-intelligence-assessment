@@ -1,18 +1,21 @@
 import { chooseRandom, pickRandom, randomBool } from "@/random";
 import { Card, CardFooter, CardHeader, CardTitle } from "@components/ui/card";
-import { comparisons, names } from "@components/TestApp/Reasoning/data";
 import React, { useContext } from "react";
 import { TestName, type TestProps } from "@components/TestApp/types";
 import TestIntro from "@components/TestApp/TestIntro";
 import TestButton from "@components/TestApp/TestButton";
 import { LocaleContext } from "@/contexts/LocaleContext";
-import { i18n } from "@/i18n";
+import { i18n, type Locale } from "@/i18n";
+import dataEn from "./data-en";
+import dataPl from "./data-pl";
 
 const Reasoning = (props: TestProps) => {
   const locale = useContext(LocaleContext);
   const t = i18n(locale, "reasoning");
   const { onCorrectAnswer, onIncorrectAnswer, testState } = props;
-  const [question, setQuestion] = React.useState(generateQuestion);
+  const [question, setQuestion] = React.useState(() =>
+    generateQuestion(locale),
+  );
   const [isStatementPhase, setIsStatementPhase] = React.useState(true);
 
   const onAnswer = (answer: string) => {
@@ -23,7 +26,7 @@ const Reasoning = (props: TestProps) => {
     }
 
     setIsStatementPhase(true);
-    setQuestion(generateQuestion());
+    setQuestion(generateQuestion(locale));
   };
 
   if (testState === "intro")
@@ -61,20 +64,23 @@ const Reasoning = (props: TestProps) => {
 
 export default Reasoning;
 
-function generateQuestion() {
+function generateQuestion(locale: Locale) {
+  const data = locale === "pl" ? dataPl : dataEn;
+  const { names, comparisons, question: questionStart } = data;
+
   const comparison = pickRandom(comparisons);
   const [name1, name2] = chooseRandom(names, 2, true);
   const isStatementPositive = randomBool();
   const isQuestionPositive = randomBool();
   const swapNames = randomBool();
 
-  const statement = `${name1} is ${
+  const statement = `${name1} ${
     isStatementPositive
       ? pickRandom(comparison.s[0])
       : pickRandom(comparison.s[1])
   } ${name2}.`;
 
-  const question = `Who is ${isQuestionPositive ? comparison.q[0] : comparison.q[1]}?`;
+  const question = `${questionStart} ${isQuestionPositive ? pickRandom(comparison.q[0]) : pickRandom(comparison.q[1])}?`;
 
   const answer = isStatementPositive === isQuestionPositive ? name1 : name2;
   const namesToCompare = swapNames ? [name2, name1] : [name1, name2];
