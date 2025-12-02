@@ -146,6 +146,7 @@ const TestsResults = (props: {
                           <div className="mt-4">
                             <MistakesTable
                               answerHistory={currentResult.answerHistory}
+                              testName={testName}
                             />
                           </div>
                         </details>

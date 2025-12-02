@@ -20,14 +20,15 @@ const Spatial = (props: TestProps) => {
   const t = useTranslations("spatial-visualization");
   const [question, setQuestion] = React.useState(generateQuestion);
 
-  const serializeQuestion = (q: ReturnType<typeof generateQuestion>) => {
-    return `Letter: ${q.letter}, Columns: ${q.columns.length}`;
-  };
-
   const onAnswer = (answer: number) => {
     const isCorrect = answer === question.answer;
     onAnswerRecorded({
-      question: serializeQuestion(question),
+      question: {
+        letter: question.letter,
+        columns: question.columns,
+        answer: question.answer,
+      },
+      questionType: TestName.SPATIAL_VISUALIZATION,
       userAnswer: answer,
       correctAnswer: question.answer,
       isCorrect,

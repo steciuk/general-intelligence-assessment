@@ -18,14 +18,14 @@ const Words = (props: TestProps) => {
   const t = useTranslations("words-meaning");
   const { question, newQuestion } = useQuestion();
 
-  const serializeQuestion = (q: { words: string[] }) => {
-    return `Words: [${q.words.join(", ")}]`;
-  };
-
   const onAnswer = (answer: string) => {
     const isCorrect = answer === question.answer;
     onAnswerRecorded({
-      question: serializeQuestion(question),
+      question: {
+        words: question.words,
+        answer: question.answer,
+      },
+      questionType: TestName.WORDS_MEANING,
       userAnswer: answer,
       correctAnswer: question.answer,
       isCorrect,

@@ -19,17 +19,14 @@ const Perceptual = (props: TestProps) => {
   const t = useTranslations("perceptual");
   const [question, setQuestion] = React.useState(generateQuestion);
 
-  const serializeQuestion = (q: ReturnType<typeof generateQuestion>) => {
-    const columnsStr = q.columns
-      .map(([lower, upper]) => `${lower}/${upper}`)
-      .join(", ");
-    return `Columns: [${columnsStr}]`;
-  };
-
   const onAnswer = (answer: number) => {
     const isCorrect = answer === question.answer;
     onAnswerRecorded({
-      question: serializeQuestion(question),
+      question: {
+        columns: question.columns,
+        answer: question.answer,
+      },
+      questionType: TestName.PERCEPTUAL_SPEED,
       userAnswer: answer,
       correctAnswer: question.answer,
       isCorrect,

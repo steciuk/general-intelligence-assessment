@@ -1,5 +1,41 @@
-export type AnswerRecord = {
+export type SpatialQuestionData = {
+  letter: string;
+  columns: Array<Array<{ isMirrored: boolean; rotation: number }>>;
+  answer: number;
+};
+
+export type PerceptualQuestionData = {
+  columns: Array<[string, string]>;
+  answer: number;
+};
+
+export type NumbersQuestionData = {
+  numbers: number[];
+  answer: number;
+};
+
+export type WordsQuestionData = {
+  words: string[];
+  answer: string;
+};
+
+export type ReasoningQuestionData = {
+  statement: string;
   question: string;
+  namesToCompare: string[];
+  answer: string;
+};
+
+export type QuestionData =
+  | SpatialQuestionData
+  | PerceptualQuestionData
+  | NumbersQuestionData
+  | WordsQuestionData
+  | ReasoningQuestionData;
+
+export type AnswerRecord = {
+  question: QuestionData;
+  questionType: TestName;
   userAnswer: string | number;
   correctAnswer: string | number;
   isCorrect: boolean;

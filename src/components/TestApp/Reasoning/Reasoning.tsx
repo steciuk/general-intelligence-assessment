@@ -19,18 +19,16 @@ const Reasoning = (props: TestProps) => {
   const { question, newQuestion } = useQuestion();
   const [isStatementPhase, setIsStatementPhase] = React.useState(true);
 
-  const serializeQuestion = (q: {
-    statement: string;
-    question: string;
-    namesToCompare: string[];
-  }) => {
-    return `${q.statement} ${q.question} Options: [${q.namesToCompare.join(", ")}]`;
-  };
-
   const onAnswer = (answer: string) => {
     const isCorrect = answer === question.answer;
     onAnswerRecorded({
-      question: serializeQuestion(question),
+      question: {
+        statement: question.statement,
+        question: question.question,
+        namesToCompare: question.namesToCompare,
+        answer: question.answer,
+      },
+      questionType: TestName.REASONING,
       userAnswer: answer,
       correctAnswer: question.answer,
       isCorrect,

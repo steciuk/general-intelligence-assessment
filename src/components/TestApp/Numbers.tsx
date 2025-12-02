@@ -13,14 +13,14 @@ const Numbers = (props: TestProps) => {
   const t = useTranslations("numbers");
   const [question, setQuestion] = React.useState(generateQuestion);
 
-  const serializeQuestion = (q: ReturnType<typeof generateQuestion>) => {
-    return `Numbers: [${q.numbers.join(", ")}]`;
-  };
-
   const onAnswer = (answer: number) => {
     const isCorrect = answer === question.answer;
     onAnswerRecorded({
-      question: serializeQuestion(question),
+      question: {
+        numbers: question.numbers,
+        answer: question.answer,
+      },
+      questionType: TestName.NUMBERS_SPEED_AND_ACCURACY,
       userAnswer: answer,
       correctAnswer: question.answer,
       isCorrect,
