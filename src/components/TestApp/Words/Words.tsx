@@ -13,12 +13,25 @@ import { useTranslations } from "@/contexts/TranslationsContext";
 import { useTestData } from "@/contexts/TestDataContext";
 
 const Words = (props: TestProps) => {
-  const { onCorrectAnswer, onIncorrectAnswer, testState } = props;
+  const { onCorrectAnswer, onIncorrectAnswer, onAnswerRecorded, testState } =
+    props;
   const t = useTranslations("words-meaning");
   const { question, newQuestion } = useQuestion();
 
+  const serializeQuestion = (q: { words: string[] }) => {
+    return `Words: [${q.words.join(", ")}]`;
+  };
+
   const onAnswer = (answer: string) => {
-    if (answer === question.answer) {
+    const isCorrect = answer === question.answer;
+    onAnswerRecorded({
+      question: serializeQuestion(question),
+      userAnswer: answer,
+      correctAnswer: question.answer,
+      isCorrect,
+    });
+
+    if (isCorrect) {
       onCorrectAnswer();
     } else {
       logOnIncorrect(question, answer);

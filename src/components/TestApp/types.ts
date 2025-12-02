@@ -1,14 +1,23 @@
+export type AnswerRecord = {
+  question: string;
+  userAnswer: string | number;
+  correctAnswer: string | number;
+  isCorrect: boolean;
+};
+
 export type TestProps = {
   testState: "intro" | "in-progress";
   onStartTest: () => void;
   onCorrectAnswer: () => void;
   onIncorrectAnswer: () => void;
+  onAnswerRecorded: (record: AnswerRecord) => void;
 };
 
 export type TestResults = Partial<{
   [key in TestName]: {
     numCorrect: number;
     numIncorrect: number;
+    answerHistory?: AnswerRecord[];
   };
 }>;
 

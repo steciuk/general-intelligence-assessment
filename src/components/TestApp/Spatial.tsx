@@ -15,12 +15,25 @@ import {
 import React from "react";
 
 const Spatial = (props: TestProps) => {
-  const { onCorrectAnswer, onIncorrectAnswer, testState } = props;
+  const { onCorrectAnswer, onIncorrectAnswer, onAnswerRecorded, testState } =
+    props;
   const t = useTranslations("spatial-visualization");
   const [question, setQuestion] = React.useState(generateQuestion);
 
+  const serializeQuestion = (q: ReturnType<typeof generateQuestion>) => {
+    return `Letter: ${q.letter}, Columns: ${q.columns.length}`;
+  };
+
   const onAnswer = (answer: number) => {
-    if (answer === question.answer) {
+    const isCorrect = answer === question.answer;
+    onAnswerRecorded({
+      question: serializeQuestion(question),
+      userAnswer: answer,
+      correctAnswer: question.answer,
+      isCorrect,
+    });
+
+    if (isCorrect) {
       onCorrectAnswer();
     } else {
       logOnIncorrect(question, answer);

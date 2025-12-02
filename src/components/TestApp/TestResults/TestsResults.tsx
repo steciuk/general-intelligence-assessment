@@ -10,6 +10,7 @@ import {
 import ResultsChart, {
   type ScoredResult,
 } from "@components/TestApp/TestResults/ResultsChart";
+import MistakesTable from "@components/TestApp/TestResults/MistakesTable";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { Button } from "@components/ui/button";
 import { useTranslations } from "@/contexts/TranslationsContext";
@@ -110,22 +111,47 @@ const TestsResults = (props: {
                 <CardTitle>{t("test-names", testName)}</CardTitle>
               </CardHeader>
               {currentResult && (
-                <CardContent className="flex items-center justify-between text-xl">
-                  <div className="flex flex-wrap overflow-hidden rounded-sm text-center">
-                    <div className="min-w-12 bg-chart-2 p-2 text-destructive-foreground">
-                      {currentResult.numCorrect}
+                <>
+                  <CardContent className="flex items-center justify-between text-xl">
+                    <div className="flex flex-wrap overflow-hidden rounded-sm text-center">
+                      <div className="min-w-12 bg-chart-2 p-2 text-destructive-foreground">
+                        {currentResult.numCorrect}
+                      </div>
+                      <div className="min-w-12 bg-destructive p-2 text-destructive-foreground">
+                        {currentResult.numIncorrect}
+                      </div>
                     </div>
-                    <div className="min-w-12 bg-destructive p-2 text-destructive-foreground">
-                      {currentResult.numIncorrect}
+                    <div className="font-bold">
+                      {SCORING_FUNCTIONS[testName](
+                        currentResult.numCorrect,
+                        currentResult.numIncorrect,
+                      )}
                     </div>
-                  </div>
-                  <div className="font-bold">
-                    {SCORING_FUNCTIONS[testName](
-                      currentResult.numCorrect,
-                      currentResult.numIncorrect,
+                  </CardContent>
+                  {currentResult.answerHistory &&
+                    currentResult.answerHistory.length > 0 && (
+                      <CardContent>
+                        <details className="group">
+                          <summary className="cursor-pointer list-none font-semibold hover:text-primary">
+                            <span className="flex items-center gap-2">
+                              <span>
+                                {t("results-history", "view-answers") ||
+                                  "View Answer History"}
+                              </span>
+                              <span className="transition-transform group-open:rotate-180">
+                                ▼
+                              </span>
+                            </span>
+                          </summary>
+                          <div className="mt-4">
+                            <MistakesTable
+                              answerHistory={currentResult.answerHistory}
+                            />
+                          </div>
+                        </details>
+                      </CardContent>
                     )}
-                  </div>
-                </CardContent>
+                </>
               )}
               <CardFooter>
                 {allResults && allResults.length > 0 ? (

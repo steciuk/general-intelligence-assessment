@@ -14,12 +14,28 @@ import {
 import React from "react";
 
 const Perceptual = (props: TestProps) => {
-  const { onCorrectAnswer, onIncorrectAnswer, testState } = props;
+  const { onCorrectAnswer, onIncorrectAnswer, onAnswerRecorded, testState } =
+    props;
   const t = useTranslations("perceptual");
   const [question, setQuestion] = React.useState(generateQuestion);
 
+  const serializeQuestion = (q: ReturnType<typeof generateQuestion>) => {
+    const columnsStr = q.columns
+      .map(([lower, upper]) => `${lower}/${upper}`)
+      .join(", ");
+    return `Columns: [${columnsStr}]`;
+  };
+
   const onAnswer = (answer: number) => {
-    if (answer === question.answer) {
+    const isCorrect = answer === question.answer;
+    onAnswerRecorded({
+      question: serializeQuestion(question),
+      userAnswer: answer,
+      correctAnswer: question.answer,
+      isCorrect,
+    });
+
+    if (isCorrect) {
       onCorrectAnswer();
     } else {
       logOnIncorrect(question, answer);
