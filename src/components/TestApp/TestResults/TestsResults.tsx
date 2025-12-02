@@ -98,38 +98,67 @@ const TestsResults = (props: {
     return resultsMap;
   }, [currentResults, previousResults]);
 
+  // Find the most recent result with answer history for each test
+  const answerHistoryMap = React.useMemo(() => {
+    const historyMap = new Map<TestName, typeof currentResults[TestName]>();
+
+    TESTS.forEach((testName) => {
+      // First, check currentResults
+      const currentResult = currentResults[testName];
+      if (currentResult?.answerHistory && currentResult.answerHistory.length > 0) {
+        historyMap.set(testName, currentResult);
+        return;
+      }
+
+      // Otherwise, find the most recent from previousResults (iterate backwards)
+      for (let i = previousResults.length - 1; i >= 0; i--) {
+        const testResult = previousResults[i][testName];
+        if (testResult?.answerHistory && testResult.answerHistory.length > 0) {
+          historyMap.set(testName, testResult);
+          break;
+        }
+      }
+    });
+
+    return historyMap;
+  }, [currentResults, previousResults]);
+
   return (
     <>
       <ul className="space-y-4">
         {TESTS.map((testName) => {
           const currentResult = currentResults[testName];
           const allResults = results.get(testName);
+          const resultWithHistory = answerHistoryMap.get(testName);
+
+          // Use currentResult if available, otherwise use resultWithHistory for display
+          const displayResult = currentResult || resultWithHistory;
 
           return (
             <Card key={testName}>
               <CardHeader>
                 <CardTitle>{t("test-names", testName)}</CardTitle>
               </CardHeader>
-              {currentResult && (
+              {displayResult && (
                 <>
                   <CardContent className="flex items-center justify-between text-xl">
                     <div className="flex flex-wrap overflow-hidden rounded-sm text-center">
                       <div className="min-w-12 bg-chart-2 p-2 text-destructive-foreground">
-                        {currentResult.numCorrect}
+                        {displayResult.numCorrect}
                       </div>
                       <div className="min-w-12 bg-destructive p-2 text-destructive-foreground">
-                        {currentResult.numIncorrect}
+                        {displayResult.numIncorrect}
                       </div>
                     </div>
                     <div className="font-bold">
                       {SCORING_FUNCTIONS[testName](
-                        currentResult.numCorrect,
-                        currentResult.numIncorrect,
+                        displayResult.numCorrect,
+                        displayResult.numIncorrect,
                       )}
                     </div>
                   </CardContent>
-                  {currentResult.answerHistory &&
-                    currentResult.answerHistory.length > 0 && (
+                  {displayResult.answerHistory &&
+                    displayResult.answerHistory.length > 0 && (
                       <CardContent>
                         <details className="group">
                           <summary className="cursor-pointer list-none font-semibold hover:text-primary">
@@ -145,7 +174,7 @@ const TestsResults = (props: {
                           </summary>
                           <div className="mt-4">
                             <MistakesTable
-                              answerHistory={currentResult.answerHistory}
+                              answerHistory={displayResult.answerHistory}
                               testName={testName}
                             />
                           </div>
