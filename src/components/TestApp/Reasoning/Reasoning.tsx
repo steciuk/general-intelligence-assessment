@@ -14,12 +14,27 @@ import { useTestData } from "@/contexts/TestDataContext";
 
 const Reasoning = (props: TestProps) => {
   const t = useTranslations("reasoning");
-  const { onCorrectAnswer, onIncorrectAnswer, testState } = props;
+  const { onCorrectAnswer, onIncorrectAnswer, onAnswerRecorded, testState } =
+    props;
   const { question, newQuestion } = useQuestion();
   const [isStatementPhase, setIsStatementPhase] = React.useState(true);
 
   const onAnswer = (answer: string) => {
-    if (answer === question.answer) {
+    const isCorrect = answer === question.answer;
+    onAnswerRecorded({
+      question: {
+        statement: question.statement,
+        question: question.question,
+        namesToCompare: question.namesToCompare,
+        answer: question.answer,
+      },
+      questionType: TestName.REASONING,
+      userAnswer: answer,
+      correctAnswer: question.answer,
+      isCorrect,
+    });
+
+    if (isCorrect) {
       onCorrectAnswer();
     } else {
       logOnIncorrect(question, answer);

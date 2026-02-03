@@ -14,12 +14,25 @@ import {
 import React from "react";
 
 const Perceptual = (props: TestProps) => {
-  const { onCorrectAnswer, onIncorrectAnswer, testState } = props;
+  const { onCorrectAnswer, onIncorrectAnswer, onAnswerRecorded, testState } =
+    props;
   const t = useTranslations("perceptual");
   const [question, setQuestion] = React.useState(generateQuestion);
 
   const onAnswer = (answer: number) => {
-    if (answer === question.answer) {
+    const isCorrect = answer === question.answer;
+    onAnswerRecorded({
+      question: {
+        columns: question.columns,
+        answer: question.answer,
+      },
+      questionType: TestName.PERCEPTUAL_SPEED,
+      userAnswer: answer,
+      correctAnswer: question.answer,
+      isCorrect,
+    });
+
+    if (isCorrect) {
       onCorrectAnswer();
     } else {
       logOnIncorrect(question, answer);

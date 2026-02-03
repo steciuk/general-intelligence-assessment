@@ -8,12 +8,25 @@ import { Card, CardHeader, CardTitle, CardFooter } from "@components/ui/card";
 import React from "react";
 
 const Numbers = (props: TestProps) => {
-  const { onCorrectAnswer, onIncorrectAnswer, testState } = props;
+  const { onCorrectAnswer, onIncorrectAnswer, onAnswerRecorded, testState } =
+    props;
   const t = useTranslations("numbers");
   const [question, setQuestion] = React.useState(generateQuestion);
 
   const onAnswer = (answer: number) => {
-    if (answer === question.answer) {
+    const isCorrect = answer === question.answer;
+    onAnswerRecorded({
+      question: {
+        numbers: question.numbers,
+        answer: question.answer,
+      },
+      questionType: TestName.NUMBERS_SPEED_AND_ACCURACY,
+      userAnswer: answer,
+      correctAnswer: question.answer,
+      isCorrect,
+    });
+
+    if (isCorrect) {
       onCorrectAnswer();
     } else {
       logOnIncorrect(question, answer);

@@ -1,5 +1,6 @@
 import {
   TestName,
+  type AnswerRecord,
   type TestProps,
   type TestResults,
 } from "@components/TestApp/types";
@@ -31,10 +32,18 @@ const TestPerformer = (props: {
   const currentTestName = tests[currentTestIndex];
   const CurrentTest = TEST_MAP[currentTestName];
 
-  const onTestCompleted = (numCorrect: number, numIncorrect: number) => {
+  const onTestCompleted = (
+    numCorrect: number,
+    numIncorrect: number,
+    answerHistory: AnswerRecord[],
+  ) => {
     const newResults = {
       ...testResults,
-      [currentTestName]: { numCorrect, numIncorrect },
+      [currentTestName]: {
+        numCorrect,
+        numIncorrect,
+        answerHistory,
+      },
     };
 
     if (currentTestIndex === tests.length - 1) {
