@@ -18,20 +18,13 @@ const Test = (props: {
     "intro",
   );
   const [time, setTime] = React.useState(0);
-  const [numCorrect, setNumCorrect] = React.useState(0);
-  const [numIncorrect, setNumIncorrect] = React.useState(0);
-  const [answerHistory, setAnswerHistory] = React.useState<AnswerRecord[]>([]);
   const numCorrectRef = React.useRef(0);
   const numIncorrectRef = React.useRef(0);
   const answerHistoryRef = React.useRef<AnswerRecord[]>([]);
   const testContainerRef = React.useRef<HTMLDivElement>(null);
 
   const onCorrectAnswer = () => {
-    setNumCorrect((prev) => {
-      const newValue = prev + 1;
-      numCorrectRef.current = newValue;
-      return newValue;
-    });
+    numCorrectRef.current += 1;
 
     testContainerRef.current &&
       testContainerRef.current.setAttribute("data-answer", "correct");
@@ -42,11 +35,7 @@ const Test = (props: {
   };
 
   const onIncorrectAnswer = () => {
-    setNumIncorrect((prev) => {
-      const newValue = prev + 1;
-      numIncorrectRef.current = newValue;
-      return newValue;
-    });
+    numIncorrectRef.current += 1;
 
     testContainerRef.current &&
       testContainerRef.current.setAttribute("data-answer", "incorrect");
@@ -61,11 +50,7 @@ const Test = (props: {
   };
 
   const onAnswerRecorded = (record: AnswerRecord) => {
-    setAnswerHistory((prev) => {
-      const newHistory = [...prev, record];
-      answerHistoryRef.current = newHistory;
-      return newHistory;
-    });
+    answerHistoryRef.current = [...answerHistoryRef.current, record];
   };
 
   React.useEffect(() => {
