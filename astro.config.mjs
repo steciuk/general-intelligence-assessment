@@ -10,7 +10,7 @@ import robots from "astro-robots";
 export default defineConfig({
   i18n: {
     defaultLocale: "en",
-    locales: ["en", "pl", "es", "it", "fr"],
+    locales: ["en", "pl", "es", "it", "fr", "pt"],
   },
   integrations: [
     react(),
